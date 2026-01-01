@@ -19,7 +19,7 @@
         <div class="floating-element float-3"></div>
     </div>
     
-    <!-- 优化后的头部导航 -->
+    <!-- 优化后的头部导航 - 移除下载导航项 -->
     <header id="mainHeader">
         <div class="container">
             <div class="header-content">
@@ -37,7 +37,7 @@
                     <a href="#"><i class="fas fa-home"></i> 首页</a>
                     <a href="#features"><i class="fas fa-star"></i> 特性</a>
                     <a href="#versions"><i class="fas fa-globe"></i> 服务器</a>
-                    <a href="#download"><i class="fas fa-download"></i> 下载</a>
+                    <!-- 下载导航项已移除 -->
                     <a href="https://www.cccimg.com/down.php/3877cae42eff8da8ac4bd65cb5bcfde1.zip" class="download-btn" id="downloadBtn">
                         <i class="fas fa-download"></i> 立即下载
                     </a>
@@ -76,10 +76,10 @@
         <!-- 16:9轮播图区域 -->
         <section class="carousel-section">
             <div class="carousel-container" id="carousel">
-                <!-- 轮播图将用JS动态生成 -->
+                <!-- 轮播图将由JS动态生成 -->
             </div>
             <div class="carousel-indicators" id="carouselIndicators">
-                <!-- 指示器将用JS动态生成 -->
+                <!-- 指示器将由JS动态生成 -->
             </div>
         </section>
         
@@ -185,6 +185,27 @@
                     </div>
                     <h3 class="feature-title">加入我们</h3>
                     <p class="feature-desc">点击加入Telegram频道获取最新资讯。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 堆叠卡片区域 - 新增 -->
+        <section class="stacked-cards-section">
+            <div class="container">
+                <h2 class="section-title">特色功能展示</h2>
+                <div class="stacked-cards-container" id="stackedCardsContainer">
+                    <!-- 堆叠卡片将由JS动态生成 -->
+                </div>
+                <div class="stacked-card-nav">
+                    <button class="stacked-nav-btn" id="stackedPrevBtn">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <button class="stacked-nav-btn" id="stackedNextBtn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="stacked-card-indicators" id="stackedIndicators">
+                    <!-- 指示器将由JS动态生成 -->
                 </div>
             </div>
         </section>
