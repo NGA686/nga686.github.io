@@ -1,4 +1,4 @@
-/* style.css - NGA全防网站样式 */
+/* style.css - NGA全防网站样式 - 优化版 */
 * {
     margin: 0;
     padding: 0;
@@ -18,6 +18,8 @@
     --border-color: #2a3139;
     --success-color: #10b981;
     --warning-color: #f59e0b;
+    --card-width: 280px;
+    --card-height: 350px;
 }
 
 body {
@@ -161,7 +163,7 @@ body {
     50% { transform: translateY(-20px) rotate(180deg); }
 }
 
-/* 优化后的头部样式 */
+/* 优化后的头部样式 - 移除下载导航项 */
 header {
     padding: 10px 0;
     position: fixed;
@@ -407,7 +409,7 @@ main {
     margin-top: 4px;
 }
 
-/* 16:9轮播图区域 - 优化版 */
+/* 16:9轮播图区域 - 优化版（竖屏适配） */
 .carousel-section {
     margin: 40px auto;
     max-width: 900px;
@@ -442,6 +444,7 @@ main {
 .carousel-image {
     flex: 1;
     overflow: hidden;
+    height: 66.67%; /* 竖屏时显示2/3 */
 }
 
 .carousel-image img {
@@ -456,22 +459,28 @@ main {
 }
 
 .carousel-info {
-    padding: 20px;
-    background: rgba(15, 20, 25, 0.9);
+    padding: 15px; /* 减小内边距 */
+    background: rgba(15, 20, 25, 0.95);
     text-align: center;
     border-top: 2px solid var(--primary-color);
+    height: 33.33%; /* 竖屏时占1/3 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .carousel-title {
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.1rem; /* 减小字体 */
     margin-bottom: 5px;
     font-weight: 600;
+    line-height: 1.3;
 }
 
 .carousel-subtitle {
     color: var(--gray-text);
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* 减小字体 */
+    line-height: 1.4;
 }
 
 .carousel-controls {
@@ -491,14 +500,14 @@ main {
     background: rgba(0, 0, 0, 0.6);
     color: white;
     border: none;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     transition: all 0.3s;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -850,6 +859,164 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* 堆叠卡片区域 - 新增 */
+.stacked-cards-section {
+    margin: 60px 0;
+    padding: 20px 0;
+}
+
+.stacked-cards-container {
+    position: relative;
+    height: 450px;
+    max-width: 320px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.stacked-card {
+    position: absolute;
+    width: 100%;
+    height: 400px;
+    background: var(--dark-card);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+    user-select: none;
+    transform-origin: center bottom;
+}
+
+.stacked-card:nth-child(1) {
+    z-index: 4;
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.stacked-card:nth-child(2) {
+    z-index: 3;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0.8;
+    filter: blur(2px);
+}
+
+.stacked-card:nth-child(3) {
+    z-index: 2;
+    transform: translateY(40px) scale(0.9);
+    opacity: 0.6;
+    filter: blur(4px);
+}
+
+.stacked-card:nth-child(4) {
+    z-index: 1;
+    transform: translateY(60px) scale(0.85);
+    opacity: 0.4;
+    filter: blur(6px);
+}
+
+.stacked-card.active {
+    cursor: grab;
+}
+
+.stacked-card.active:active {
+    cursor: grabbing;
+}
+
+.stacked-card-image {
+    height: 250px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.stacked-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.stacked-card:hover .stacked-card-image img {
+    transform: scale(1.05);
+}
+
+.stacked-card-content {
+    padding: 25px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stacked-card-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--light-text);
+    text-align: center;
+}
+
+.stacked-card-desc {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.stacked-card-nav {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    z-index: 5;
+}
+
+.stacked-nav-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+}
+
+.stacked-nav-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
+}
+
+.stacked-card-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 70px;
+}
+
+.stacked-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stacked-indicator.active {
+    background: var(--primary-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
 /* 下载区域 */
 .download-section {
     background: linear-gradient(135deg, rgba(55, 66, 250, 0.15), rgba(255, 71, 87, 0.15));
@@ -1104,7 +1271,7 @@ footer {
     font-size: 0.85rem;
 }
 
-/* 响应式设计 */
+/* 响应式设计 - 优化竖屏适配 */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: row;
@@ -1117,6 +1284,11 @@ footer {
     
     .nav-links a {
         font-size: 10px;
+    }
+    
+    /* 移除下载导航项，保留立即下载按钮 */
+    .nav-links a[href="#download"] {
+        display: none;
     }
     
     .download-btn {
@@ -1149,6 +1321,28 @@ footer {
         font-size: 1.4rem;
     }
     
+    /* 轮播图竖屏优化 */
+    .carousel-container {
+        aspect-ratio: 3/4; /* 竖屏更合适比例 */
+    }
+    
+    .carousel-image {
+        height: 60%; /* 竖屏时显示60% */
+    }
+    
+    .carousel-info {
+        height: 40%; /* 竖屏时占40% */
+        padding: 12px;
+    }
+    
+    .carousel-title {
+        font-size: 1rem;
+    }
+    
+    .carousel-subtitle {
+        font-size: 0.75rem;
+    }
+    
     .carousel-prev,
     .carousel-next {
         width: 35px;
@@ -1156,12 +1350,35 @@ footer {
         font-size: 1rem;
     }
     
-    .carousel-title {
-        font-size: 1rem;
-    }
-    
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* 堆叠卡片竖屏优化 */
+    .stacked-cards-container {
+        height: 400px;
+        max-width: 280px;
+    }
+    
+    .stacked-card {
+        height: 350px;
+    }
+    
+    .stacked-card-image {
+        height: 200px;
+    }
+    
+    .stacked-card-content {
+        padding: 20px;
+        height: 150px;
+    }
+    
+    .stacked-card-title {
+        font-size: 1.1rem;
+    }
+    
+    .stacked-card-desc {
+        font-size: 0.8rem;
     }
     
     .download-section {
@@ -1225,6 +1442,18 @@ footer {
         max-width: 230px;
     }
     
+    .carousel-container {
+        aspect-ratio: 2/3; /* 小屏更合适比例 */
+    }
+    
+    .carousel-image {
+        height: 55%; /* 小屏时显示55% */
+    }
+    
+    .carousel-info {
+        height: 45%; /* 小屏时占45% */
+    }
+    
     .features-grid {
         grid-template-columns: 1fr;
     }
@@ -1236,6 +1465,19 @@ footer {
     .carousel-prev,
     .carousel-next {
         display: none;
+    }
+    
+    .stacked-cards-container {
+        height: 380px;
+        max-width: 260px;
+    }
+    
+    .stacked-card {
+        height: 330px;
+    }
+    
+    .stacked-card-image {
+        height: 180px;
     }
     
     .footer-content {
@@ -1261,6 +1503,21 @@ footer {
     .carousel-container {
         max-width: 800px;
     }
+    
+    /* 横屏时恢复原比例 */
+    @media (orientation: landscape) {
+        .carousel-container {
+            aspect-ratio: 16/9;
+        }
+        
+        .carousel-image {
+            height: 70%;
+        }
+        
+        .carousel-info {
+            height: 30%;
+        }
+    }
 }
 
 /* 手机横屏优化 */
@@ -1271,6 +1528,18 @@ footer {
     
     .hero-title {
         font-size: 1.5rem;
+    }
+    
+    .carousel-container {
+        aspect-ratio: 16/9;
+    }
+    
+    .carousel-image {
+        height: 70%;
+    }
+    
+    .carousel-info {
+        height: 30%;
     }
 }
 
