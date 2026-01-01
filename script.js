@@ -1,4 +1,4 @@
-// script.js - NGA全防网站功能
+// script.js - NGA全防网站功能 - 优化手机版
 
 // 修复点击特效
 document.addEventListener('click', function(e) {
@@ -16,39 +16,39 @@ document.addEventListener('click', function(e) {
 // 滚动时改变导航栏样式
 window.addEventListener('scroll', function() {
     const header = document.getElementById('mainHeader');
-    if (window.scrollY > 50) {
+    if (window.scrollY > 30) {
         header.classList.add('scrolled');
     } else {
         header.classList.remove('scrolled');
     }
 });
 
-// 轮播图配置 - 使用可靠的图片
+// 轮播图配置
 const carouselData = [
     { 
         url: "https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg", 
         title: "NGA全防 - 专业级保护",
-        subtitle: "全球领先的游戏安全解决方案"
+        subtitle: "全球领先的游戏安全解决方案，保护您的PUBG账号安全无忧"
     },
     { 
         url: "https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg", 
         title: "多服务器支持",
-        subtitle: "全球服、日韩服、台湾服、越南服全面覆盖"
+        subtitle: "全球服、日韩服、台湾服、越南服全面覆盖，一应俱全"
     },
     { 
         url: "https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg", 
         title: "高级内存加密",
-        subtitle: "实时保护游戏数据，防止检测"
+        subtitle: "实时保护游戏数据，防止检测，确保账号安全"
     },
     { 
         url: "https://wp.mcyan.cn/view.php/86131cb378be166e8e3b402b318f92d4.jpeg", 
         title: "实时防护监控",
-        subtitle: "24/7全天候保护您的游戏账号"
+        subtitle: "24/7全天候保护您的游戏账号，随时应对威胁"
     },
     { 
         url: "https://wp.mcyan.cn/view.php/bf607ad1c7f64008aafaa1fbd5065094.jpeg", 
         title: "稳定更新保障",
-        subtitle: "持续更新，应对各种检测机制"
+        subtitle: "持续更新，应对各种检测机制，长期有效保护"
     }
 ];
 
@@ -70,7 +70,7 @@ function initCarousel() {
         carouselHTML += `
             <div class="carousel-slide ${index === 0 ? 'active' : ''}">
                 <div class="carousel-image">
-                    <img src="${item.url}" alt="${item.title}">
+                    <img src="${item.url}" alt="${item.title}" loading="lazy">
                 </div>
                 <div class="carousel-info">
                     <div class="carousel-title">${item.title}</div>
@@ -86,8 +86,8 @@ function initCarousel() {
     
     carouselHTML += `
         <div class="carousel-controls">
-            <button class="carousel-prev" onclick="prevSlide()">‹</button>
-            <button class="carousel-next" onclick="nextSlide()">›</button>
+            <button class="carousel-prev" onclick="prevSlide()" aria-label="上一张">‹</button>
+            <button class="carousel-next" onclick="nextSlide()" aria-label="下一张">›</button>
         </div>
     `;
     
@@ -100,7 +100,7 @@ function initCarousel() {
 
 function startCarousel() {
     if (carouselInterval) clearInterval(carouselInterval);
-    carouselInterval = setInterval(nextSlide, 5000);
+    carouselInterval = setInterval(nextSlide, 6000);
 }
 
 function stopCarousel() {
@@ -149,9 +149,42 @@ function goToSlide(index) {
     startCarousel();
 }
 
+// 触摸滑动支持
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.querySelector('.carousel-container')?.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+document.querySelector('.carousel-container')?.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    
+    if (touchEndX < touchStartX - swipeThreshold) {
+        // 向左滑动 - 下一张
+        nextSlide();
+    }
+    
+    if (touchEndX > touchStartX + swipeThreshold) {
+        // 向右滑动 - 上一张
+        prevSlide();
+    }
+}
+
 // 鼠标悬停时暂停轮播
 document.querySelector('.carousel-container')?.addEventListener('mouseenter', stopCarousel);
 document.querySelector('.carousel-container')?.addEventListener('mouseleave', startCarousel);
+
+// 触摸设备优化
+document.querySelector('.carousel-container')?.addEventListener('touchstart', stopCarousel);
+document.querySelector('.carousel-container')?.addEventListener('touchend', function() {
+    setTimeout(startCarousel, 3000);
+});
 
 // 显示模态框
 function showModal(modalId) {
@@ -284,7 +317,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if(targetElement) {
             e.preventDefault();
             window.scrollTo({
-                top: targetElement.offsetTop - 60,
+                top: targetElement.offsetTop - 70,
                 behavior: 'smooth'
             });
         }
@@ -317,20 +350,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化页面不透明度
     document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.transition = 'opacity 0.6s ease';
     
     // 添加加载动画
     const elements = document.querySelectorAll('.feature-item, .horizontal-card, .vertical-card, .stat-item');
     elements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
+        el.style.transform = 'translateY(25px)';
         
         setTimeout(() => {
-            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             el.style.opacity = '1';
             el.style.transform = 'translateY(0)';
-        }, 100 + (index * 50));
+        }, 150 + (index * 80));
     });
+    
+    // 添加移动端优化
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+    }
 });
 
 // 防止下拉刷新
@@ -339,3 +377,10 @@ document.addEventListener('touchmove', function(e) {
         e.preventDefault();
     }
 }, { passive: false });
+
+// 添加移动端优化类
+if ('ontouchstart' in window) {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('is-mobile');
+    });
+}
