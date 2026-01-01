@@ -1,94 +1,17 @@
-// script.js - NGA全防网站功能 - 增强版包含3D交互
+// script.js - NGA全防网站功能
 
-// 粒子背景初始化
-function initParticles() {
-    const particleContainer = document.createElement('div');
-    particleContainer.className = 'particle-background';
-    
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        // 随机大小和位置
-        const size = Math.random() * 60 + 20;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        
-        // 随机动画延迟
-        particle.style.animationDelay = `${Math.random() * 20}s`;
-        
-        particleContainer.appendChild(particle);
-    }
-    
-    document.body.appendChild(particleContainer);
-}
-
-// 触觉反馈效果
-function addHapticFeedback(element) {
-    element.addEventListener('touchstart', function() {
-        this.classList.add('haptic-feedback');
-    });
-    
-    element.addEventListener('touchend', function() {
-        this.classList.remove('haptic-feedback');
-    });
-}
-
-// 修复点击特效 - 增强版
+// 修复点击特效
 document.addEventListener('click', function(e) {
-    // 避免在移动设备上频繁触发
-    if (window.innerWidth <= 768 && e.target.tagName === 'A') return;
-    
     const ripple = document.createElement('div');
     ripple.className = 'click-ripple';
     ripple.style.left = e.clientX + 'px';
     ripple.style.top = e.clientY + 'px';
     document.body.appendChild(ripple);
     
-    // 添加声音模拟（可选）
-    if (window.innerWidth > 768) {
-        try {
-            // 创建一个微弱的点击声音（使用Web Audio API）
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 200;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.001, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.1);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (e) {
-            // 忽略音频错误
-        }
-    }
-    
     setTimeout(() => {
         ripple.remove();
     }, 800);
 });
-
-// 滚动视差效果
-function initParallax() {
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const elements = document.querySelectorAll('.hero-title, .hero-subtitle, .stat-item, .section-title');
-        
-        elements.forEach(element => {
-            const speed = element.dataset.speed || 0.5;
-            const yPos = -(scrolled * speed);
-            element.style.transform = `translateY(${yPos}px) translateZ(0)`;
-        });
-    });
-}
 
 // 滚动时改变导航栏样式
 window.addEventListener('scroll', function() {
@@ -98,10 +21,6 @@ window.addEventListener('scroll', function() {
     } else {
         header.classList.remove('scrolled');
     }
-    
-    // 添加滚动进度指示器
-    const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    document.documentElement.style.setProperty('--scroll-progress', `${scrollPercentage}%`);
 });
 
 // 轮播图配置 - 使用可靠的图片
@@ -135,7 +54,6 @@ const carouselData = [
 
 let currentSlide = 0;
 let carouselInterval;
-let isAutoPlaying = true;
 
 // 初始化轮播图
 function initCarousel() {
@@ -152,7 +70,7 @@ function initCarousel() {
         carouselHTML += `
             <div class="carousel-slide ${index === 0 ? 'active' : ''}">
                 <div class="carousel-image">
-                    <img src="${item.url}" alt="${item.title}" loading="lazy">
+                    <img src="${item.url}" alt="${item.title}">
                 </div>
                 <div class="carousel-info">
                     <div class="carousel-title">${item.title}</div>
@@ -162,50 +80,19 @@ function initCarousel() {
         `;
         
         indicatorsHTML += `
-            <div class="carousel-indicator ${index === 0 ? 'active' : ''}" 
-                 onclick="goToSlide(${index})"
-                 aria-label="切换到第 ${index + 1} 张幻灯片"></div>
+            <div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
         `;
     });
     
     carouselHTML += `
         <div class="carousel-controls">
-            <button class="carousel-prev" onclick="prevSlide()" aria-label="上一张">
-                ‹
-            </button>
-            <button class="carousel-next" onclick="nextSlide()" aria-label="下一张">
-                ›
-            </button>
+            <button class="carousel-prev" onclick="prevSlide()">‹</button>
+            <button class="carousel-next" onclick="nextSlide()">›</button>
         </div>
     `;
     
     carouselContainer.innerHTML = carouselHTML;
     indicatorsContainer.innerHTML = indicatorsHTML;
-    
-    // 添加触摸滑动支持
-    let startX = 0;
-    let endX = 0;
-    
-    carouselContainer.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        stopCarousel();
-    });
-    
-    carouselContainer.addEventListener('touchmove', (e) => {
-        endX = e.touches[0].clientX;
-    });
-    
-    carouselContainer.addEventListener('touchend', () => {
-        const threshold = 50;
-        
-        if (startX - endX > threshold) {
-            nextSlide();
-        } else if (endX - startX > threshold) {
-            prevSlide();
-        }
-        
-        startCarousel();
-    });
     
     // 自动轮播
     startCarousel();
@@ -213,9 +100,7 @@ function initCarousel() {
 
 function startCarousel() {
     if (carouselInterval) clearInterval(carouselInterval);
-    carouselInterval = setInterval(() => {
-        if (isAutoPlaying) nextSlide();
-    }, 5000);
+    carouselInterval = setInterval(nextSlide, 5000);
 }
 
 function stopCarousel() {
@@ -265,82 +150,8 @@ function goToSlide(index) {
 }
 
 // 鼠标悬停时暂停轮播
-document.querySelector('.carousel-container')?.addEventListener('mouseenter', () => {
-    isAutoPlaying = false;
-    stopCarousel();
-});
-
-document.querySelector('.carousel-container')?.addEventListener('mouseleave', () => {
-    isAutoPlaying = true;
-    startCarousel();
-});
-
-// 3D卡片翻转效果增强
-function init3DCards() {
-    const cards = document.querySelectorAll('.flip-card, .horizontal-card, .vertical-card, .feature-item');
-    
-    cards.forEach(card => {
-        // 添加触摸反馈
-        addHapticFeedback(card);
-        
-        // 3D悬停效果
-        card.addEventListener('mousemove', (e) => {
-            if (window.innerWidth <= 768) return;
-            
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateY = ((x - centerX) / centerX) * 5;
-            const rotateX = ((centerY - y) / centerY) * 5;
-            
-            card.style.transform = `
-                perspective(1000px)
-                rotateX(${rotateX}deg)
-                rotateY(${rotateY}deg)
-                translateZ(20px)
-            `;
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-            card.style.transition = 'transform 0.5s ease';
-            
-            setTimeout(() => {
-                card.style.transition = '';
-            }, 500);
-        });
-        
-        // 移动端触摸效果
-        card.addEventListener('touchstart', () => {
-            if (window.innerWidth <= 768) {
-                card.style.transform = 'scale(0.98)';
-            }
-        });
-        
-        card.addEventListener('touchend', () => {
-            if (window.innerWidth <= 768) {
-                card.style.transform = 'scale(1)';
-            }
-        });
-    });
-    
-    // 专门的翻转卡片
-    const flipCards = document.querySelectorAll('.flip-card');
-    flipCards.forEach(card => {
-        card.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                // 移动端使用更简单的翻转
-                this.style.transform = this.style.transform.includes('rotateY(180deg)') 
-                    ? 'rotateY(0)' 
-                    : 'rotateY(180deg)';
-            }
-        });
-    });
-}
+document.querySelector('.carousel-container')?.addEventListener('mouseenter', stopCarousel);
+document.querySelector('.carousel-container')?.addEventListener('mouseleave', startCarousel);
 
 // 显示模态框
 function showModal(modalId) {
@@ -348,9 +159,6 @@ function showModal(modalId) {
     if (modal) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        
-        // 添加触觉反馈
-        addHapticFeedback(modal);
     }
 }
 
@@ -476,7 +284,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if(targetElement) {
             e.preventDefault();
             window.scrollTo({
-                top: targetElement.offsetTop - 70,
+                top: targetElement.offsetTop - 60,
                 behavior: 'smooth'
             });
         }
@@ -485,15 +293,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // 页面加载
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化各种效果
-    initParticles();
-    initParallax();
+    // 初始化轮播图
     initCarousel();
-    init3DCards();
-    
-    // 为所有交互元素添加触觉反馈
-    const interactiveElements = document.querySelectorAll('button, a, .card-btn, .feature-item, .horizontal-card, .vertical-card');
-    interactiveElements.forEach(addHapticFeedback);
     
     // 页面加载动画
     setTimeout(() => {
@@ -516,90 +317,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化页面不透明度
     document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    document.body.style.transition = 'opacity 0.5s ease';
     
     // 添加加载动画
     const elements = document.querySelectorAll('.feature-item, .horizontal-card, .vertical-card, .stat-item');
     elements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px) scale(0.9)';
+        el.style.transform = 'translateY(20px)';
         
         setTimeout(() => {
-            el.style.transition = 'opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             el.style.opacity = '1';
-            el.style.transform = 'translateY(0) scale(1)';
-        }, 100 + (index * 80));
+            el.style.transform = 'translateY(0)';
+        }, 100 + (index * 50));
     });
-    
-    // 添加滚动动画
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-            }
-        });
-    }, observerOptions);
-    
-    // 观察所有需要动画的元素
-    const animatedElements = document.querySelectorAll('.feature-item, .horizontal-card, .vertical-card, .stat-item, .section-title');
-    animatedElements.forEach(el => observer.observe(el));
 });
 
-// 防止下拉刷新和双击缩放
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(event) {
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
+// 防止下拉刷新
+document.addEventListener('touchmove', function(e) {
+    if(e.touches.length > 1 || (e.scale && e.scale !== 1)) {
+        e.preventDefault();
     }
-    lastTouchEnd = now;
-}, false);
-
-// 禁用双击缩放
-document.addEventListener('dblclick', function(e) {
-    e.preventDefault();
 }, { passive: false });
-
-// 性能优化：在滚动时暂停动画
-let ticking = false;
-window.addEventListener('scroll', function() {
-    if (!ticking) {
-        window.requestAnimationFrame(function() {
-            // 在滚动时暂停一些动画以提高性能
-            document.querySelectorAll('.particle').forEach(particle => {
-                particle.style.animationPlayState = 'paused';
-            });
-            
-            setTimeout(() => {
-                document.querySelectorAll('.particle').forEach(particle => {
-                    particle.style.animationPlayState = 'running';
-                });
-            }, 100);
-            
-            ticking = false;
-        });
-        ticking = true;
-    }
-});
-
-// 设备检测和优化
-function detectDevice() {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const isTablet = /iPad|Android.*Tablet/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        document.documentElement.classList.add('mobile-device');
-    }
-    
-    if (isTablet) {
-        document.documentElement.classList.add('tablet-device');
-    }
-}
-
-// 初始化设备检测
-detectDevice();
