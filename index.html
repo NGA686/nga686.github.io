@@ -3,77 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="NGA全防 - PUBG专业反封禁系统，保护您的游戏账号安全">
-    <meta name="keywords" content="NGA全防,PUBG,反封禁,游戏安全,内存保护,全球服,日韩服,台湾服,越南服">
-    <meta name="author" content="无罪">
     <title>NGA全防 - PUBG专业反封禁系统</title>
-    
-    <!-- 预加载关键资源 -->
-    <link rel="preload" href="style.css" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-    
-    <!-- 外部资源 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="https://www.cccimg.com/view.php/12617b402211b7f656ecba381d2f2f0e.png">
-    
-    <!-- 移动端优化 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0f1419">
-    
-    <style>
-        /* 初始加载动画 */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0f1419;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loading-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 3px solid #ff4757;
-            animation: loadingPulse 1.5s infinite;
-        }
-        
-        @keyframes loadingPulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
-            }
-            50% { 
-                transform: scale(1.1);
-                box-shadow: 0 0 40px rgba(255, 71, 87, 0.6);
-            }
-        }
-        
-        /* 确保内容在加载完成后显示 */
-        body:not(.loaded) .main-content {
-            opacity: 0;
-        }
-    </style>
 </head>
-<body>
-    <!-- 加载屏幕 -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-logo">
-            <img src="https://www.cccimg.com/view.php/12617b402211b7f656ecba381d2f2f0e.png" alt="NGA全防" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-    </div>
+<body class="no-select">
+    <!-- 动态网格背景 -->
+    <div class="grid-background" id="gridBackground"></div>
     
-    <!-- 增强的动态网格背景 -->
-    <div class="grid-background"></div>
+    <!-- 自定义图片背景 -->
+    <div class="custom-background" id="customBackground"></div>
     
     <!-- 浮动背景元素 -->
     <div class="floating-elements">
@@ -82,13 +22,18 @@
         <div class="floating-element float-3"></div>
     </div>
     
-    <!-- 优化后的头部导航 - 只有一个下载按钮 -->
+    <!-- 设置按钮 -->
+    <button class="settings-btn" id="settingsBtn" title="个性化设置">
+        <i class="fas fa-cog"></i>
+    </button>
+    
+    <!-- 优化后的头部导航 -->
     <header id="mainHeader">
         <div class="container">
             <div class="header-content">
                 <a href="#" class="logo">
                     <div class="logo-img">
-                        <img src="https://www.cccimg.com/view.php/12617b402211b7f656ecba381d2f2f0e.png" alt="NGA全防logo" loading="eager">
+                        <img src="https://www.cccimg.com/view.php/12617b402211b7f656ecba381d2f2f0e.png" alt="NGA全防logo">
                     </div>
                     <div class="logo-text">
                         <h1>NGA全防</h1>
@@ -100,8 +45,9 @@
                     <a href="#"><i class="fas fa-home"></i> 首页</a>
                     <a href="#features"><i class="fas fa-star"></i> 特性</a>
                     <a href="#versions"><i class="fas fa-globe"></i> 服务器</a>
-                    <a href="#download" class="download-btn">
-                        <i class="fas fa-download"></i> 下载
+                    <a href="#download"><i class="fas fa-download"></i> 下载</a>
+                    <a href="https://www.cccimg.com/down.php/3877cae42eff8da8ac4bd65cb5bcfde1.zip" class="download-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i> 立即下载
                     </a>
                 </div>
             </div>
@@ -109,7 +55,7 @@
     </header>
     
     <!-- 主要内容 -->
-    <main class="main-content">
+    <main>
         <!-- Hero区域 -->
         <section class="hero-section">
             <div class="container">
@@ -135,7 +81,7 @@
             </div>
         </section>
         
-        <!-- 16:9轮播图区域 - 手机竖屏优化 -->
+        <!-- 16:9轮播图区域 -->
         <section class="carousel-section">
             <div class="carousel-container" id="carousel">
                 <!-- 轮播图将用JS动态生成 -->
@@ -145,68 +91,186 @@
             </div>
         </section>
         
-        <!-- 横屏卡片区域 -->
+        <!-- 横屏卡片区域（带3D翻转） -->
         <section class="horizontal-cards" id="features">
             <div class="container">
                 <h2 class="section-title">核心技术</h2>
                 <div class="cards-container">
-                    <!-- 卡片1 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">独家</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术" loading="lazy">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">全局内存保护</h3>
-                            <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 实时内存加密</li>
-                                <li><i class="fas fa-check-circle"></i> 反调试保护</li>
-                                <li><i class="fas fa-check-circle"></i> 进程隐藏技术</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('memoryModal')">
-                                <i class="fas fa-info-circle"></i> 查看详情
-                            </button>
+                    <!-- 卡片1 - 带3D翻转 -->
+                    <div class="card-3d-container">
+                        <div class="card-3d">
+                            <div class="card-front">
+                                <div class="horizontal-card">
+                                    <div class="card-badge">独家</div>
+                                    <div class="card-image">
+                                        <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术">
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">全局内存保护</h3>
+                                        <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
+                                        <div class="card-features">
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 实时内存加密</div>
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 反调试保护</div>
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 进程隐藏技术</div>
+                                        </div>
+                                        <button class="card-btn flip-btn" data-card="1">
+                                            <i class="fas fa-sync-alt"></i> 查看技术详情
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="horizontal-card back-card">
+                                    <div class="card-content">
+                                        <div class="back-badge">技术细节</div>
+                                        <h3 class="card-title">内存保护核心技术</h3>
+                                        <div class="tech-details">
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-microchip"></i> 加密算法</h4>
+                                                <p>AES-256 实时内存加密，防止数据泄露</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-shield-alt"></i> 防护层级</h4>
+                                                <p>3层防护体系，内核级保护</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-bolt"></i> 性能优化</h4>
+                                                <p>CPU占用低于2%，不影响游戏性能</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-history"></i> 更新频率</h4>
+                                                <p>24小时监控，实时更新防护规则</p>
+                                            </div>
+                                        </div>
+                                        <button class="card-btn flip-btn back" data-card="1">
+                                            <i class="fas fa-undo"></i> 返回正面
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- 卡片2 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">多服支持</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容" loading="lazy">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">全服务器兼容</h3>
-                            <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 全球服优化</li>
-                                <li><i class="fas fa-check-circle"></i> 亚洲服专属</li>
-                                <li><i class="fas fa-check-circle"></i> 实时适配更新</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('serverModal')">
-                                <i class="fas fa-info-circle"></i> 查看详情
-                            </button>
+                    <!-- 卡片2 - 带3D翻转 -->
+                    <div class="card-3d-container">
+                        <div class="card-3d">
+                            <div class="card-front">
+                                <div class="horizontal-card">
+                                    <div class="card-badge">多服支持</div>
+                                    <div class="card-image">
+                                        <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容">
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">全服务器兼容</h3>
+                                        <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
+                                        <div class="card-features">
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 全球服优化</div>
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 亚洲服专属</div>
+                                            <div class="feature-line"><i class="fas fa-check-circle"></i> 实时适配更新</div>
+                                        </div>
+                                        <button class="card-btn flip-btn" data-card="2">
+                                            <i class="fas fa-sync-alt"></i> 查看服务器详情
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="horizontal-card back-card">
+                                    <div class="card-content">
+                                        <div class="back-badge">服务器详情</div>
+                                        <h3 class="card-title">各服务器优化方案</h3>
+                                        <div class="tech-details">
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-globe"></i> 全球服</h4>
+                                                <p>针对国际玩家优化，低延迟连接</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-flag"></i> 日韩服</h4>
+                                                <p>专属线路优化，<15ms延迟</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-flag"></i> 台湾服</h4>
+                                                <p>本地服务器加速，稳定连接</p>
+                                            </div>
+                                            <div class="tech-item">
+                                                <h4><i class="fas fa-flag"></i> 越南服</h4>
+                                                <p>东南亚专线，完美兼容当地网络</p>
+                                            </div>
+                                        </div>
+                                        <button class="card-btn flip-btn back" data-card="2">
+                                            <i class="fas fa-undo"></i> 返回正面
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- 卡片3 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">即将推出</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持" loading="lazy">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">和平精英支持</h3>
-                            <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-clock"></i> 开发中</li>
-                                <li><i class="fas fa-clock"></i> 预计Q4发布</li>
-                                <li><i class="fas fa-clock"></i> 内测招募中</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('peaceModal')">
-                                <i class="fas fa-info-circle"></i> 了解更多
-                            </button>
+                    <!-- 卡片3 - 带3D翻转 -->
+                    <div class="card-3d-container">
+                        <div class="card-3d">
+                            <div class="card-front">
+                                <div class="horizontal-card">
+                                    <div class="card-badge">即将推出</div>
+                                    <div class="card-image">
+                                        <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持">
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">和平精英支持</h3>
+                                        <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
+                                        <div class="card-features">
+                                            <div class="feature-line"><i class="fas fa-clock"></i> 开发中</div>
+                                            <div class="feature-line"><i class="fas fa-clock"></i> 预计Q4发布</div>
+                                            <div class="feature-line"><i class="fas fa-clock"></i> 内测招募中</div>
+                                        </div>
+                                        <button class="card-btn flip-btn" data-card="3">
+                                            <i class="fas fa-sync-alt"></i> 查看开发进度
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="horizontal-card back-card">
+                                    <div class="card-content">
+                                        <div class="back-badge">开发进度</div>
+                                        <h3 class="card-title">和平精英版本开发中</h3>
+                                        <div class="progress-container">
+                                            <div class="progress-info">
+                                                <h4>开发进度：<span class="progress-percent">75%</span></h4>
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 75%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="tech-details">
+                                                <div class="tech-item">
+                                                    <h4><i class="fas fa-check-circle done"></i> 核心引擎</h4>
+                                                    <p>已完成适配，性能测试通过</p>
+                                                </div>
+                                                <div class="tech-item">
+                                                    <h4><i class="fas fa-check-circle done"></i> 内存保护</h4>
+                                                    <p>基础框架完成，正在优化</p>
+                                                </div>
+                                                <div class="tech-item">
+                                                    <h4><i class="fas fa-spinner"></i> 反检测系统</h4>
+                                                    <p>开发中，预计2周完成</p>
+                                                </div>
+                                                <div class="tech-item">
+                                                    <h4><i class="fas fa-clock"></i> UI界面</h4>
+                                                    <p>设计阶段，即将开始开发</p>
+                                                </div>
+                                            </div>
+                                            <div class="join-test">
+                                                <button class="card-btn" onclick="joinTest()">
+                                                    <i class="fas fa-user-plus"></i> 申请内测资格
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button class="card-btn flip-btn back" data-card="3">
+                                            <i class="fas fa-undo"></i> 返回正面
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -260,7 +324,7 @@
                     <div class="vertical-card">
                         <div class="server-badge">推荐</div>
                         <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_3.jpg" alt="全球服" loading="lazy">
+                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_3.jpg" alt="全球服">
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">PUBG全球服</h3>
@@ -275,7 +339,7 @@
                     <div class="vertical-card">
                         <div class="server-badge">热门</div>
                         <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_11.jpg" alt="日韩服" loading="lazy">
+                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_11.jpg" alt="日韩服">
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">PUBG日韩服</h3>
@@ -290,7 +354,7 @@
                     <div class="vertical-card">
                         <div class="server-badge">稳定</div>
                         <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_25.jpg" alt="台湾服" loading="lazy">
+                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_25.jpg" alt="台湾服">
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">PUBG台湾服</h3>
@@ -301,9 +365,10 @@
                         </div>
                     </div>
                     
-                            <!-- 越南服继续 -->
+                    <!-- 越南服 -->
+                    <div class="vertical-card">
                         <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_29.jpg" alt="越南服" loading="lazy">
+                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_29.jpg" alt="越南服">
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">PUBG越南服</h3>
@@ -364,7 +429,7 @@
                 <div class="footer-section">
                     <h3>NGA全防</h3>
                     <p style="color: var(--gray-text); margin-bottom: 15px; font-size: 0.9rem;">专业的PUBG反封禁解决方案，保护您的游戏账号安全。</p>
-                    <div style="display: flex; gap: 12px; justify-content: center;">
+                    <div style="display: flex; gap: 12px;">
                         <a href="javascript:void(0)" onclick="joinTelegram()" style="color: var(--gray-text); font-size: 1.1rem;" title="Telegram频道">
                             <i class="fab fa-telegram"></i>
                         </a>
@@ -415,7 +480,94 @@
         </div>
     </footer>
     
-    <!-- Telegram模态弹窗 -->
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3><i class="fas fa-cog"></i> 个性化设置</h3>
+            <button class="settings-close" id="settingsClose">&times;</button>
+        </div>
+        <div class="settings-content">
+            <div class="setting-group">
+                <h4><i class="fas fa-palette"></i> 背景主题</h4>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-theme="grid">
+                        <i class="fas fa-th-large"></i> 网格背景
+                    </button>
+                    <button class="theme-btn" data-theme="image1">
+                        <i class="fas fa-mountain"></i> 游戏场景1
+                    </button>
+                    <button class="theme-btn" data-theme="image2">
+                        <i class="fas fa-gamepad"></i> 游戏场景2
+                    </button>
+                    <button class="theme-btn" data-theme="image3">
+                        <i class="fas fa-shield-alt"></i> 科技背景
+                    </button>
+                    <button class="theme-btn" data-theme="custom">
+                        <i class="fas fa-image"></i> 自定义图片
+                    </button>
+                </div>
+            </div>
+            
+            <div class="setting-group custom-image-group" id="customImageGroup">
+                <h4><i class="fas fa-image"></i> 自定义背景图片</h4>
+                <div class="custom-image-input">
+                    <input type="text" id="customImageUrl" placeholder="输入图片URL链接" value="">
+                    <button class="btn-small" id="previewImage">预览</button>
+                </div>
+                <div class="image-preview" id="imagePreview"></div>
+                <p class="setting-hint">推荐使用16:9的高清图片链接</p>
+            </div>
+            
+            <div class="setting-group">
+                <h4><i class="fas fa-adjust"></i> 动画效果</h4>
+                <div class="switch-group">
+                    <label class="switch">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">启用动画效果</span>
+                </div>
+                <div class="switch-group">
+                    <label class="switch">
+                        <input type="checkbox" id="flipEffectsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">启用卡片翻转效果</span>
+                </div>
+                <div class="switch-group">
+                    <label class="switch">
+                        <input type="checkbox" id="clickEffectsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">启用点击特效</span>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <h4><i class="fas fa-paint-brush"></i> 颜色微调</h4>
+                <div class="color-picker">
+                    <div class="color-option" data-color="default" style="background: linear-gradient(135deg, #ff4757, #3742fa);"></div>
+                    <div class="color-option" data-color="green" style="background: linear-gradient(135deg, #10b981, #0ea5e9);"></div>
+                    <div class="color-option" data-color="purple" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);"></div>
+                    <div class="color-option" data-color="orange" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></div>
+                    <div class="color-option" data-color="cyan" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></div>
+                </div>
+                <p class="setting-hint">选择主题颜色</p>
+            </div>
+            
+            <div class="setting-group">
+                <h4><i class="fas fa-undo"></i> 重置设置</h4>
+                <button class="btn-reset" id="resetSettings">
+                    <i class="fas fa-redo"></i> 恢复默认设置
+                </button>
+            </div>
+        </div>
+        <div class="settings-footer">
+            <p>设置已自动保存</p>
+        </div>
+    </div>
+    
+    <!-- 模态弹窗 -->
     <div id="telegramModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -427,79 +579,16 @@
                     <i class="fab fa-telegram"></i>
                 </div>
                 <h3 style="margin-bottom: 15px;">@NGAYYDS</h3>
-                <p style="color: var(--gray-text); margin-bottom: 25px; line-height: 1.6;">点击下方按钮加入我们的Telegram频道，获取最新更新、技术支持和社区交流。</p>
-                <a href="https://t.me/NGAYYDS" target="_blank" style="background: linear-gradient(135deg, #0088cc, #00acee); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s;">
+                <p style="color: var(--gray-text); margin-bottom: 25px;">点击下方按钮加入我们的Telegram频道，获取最新更新、技术支持和社区交流。</p>
+                <a href="https://t.me/NGAYYDS" target="_blank" style="background: linear-gradient(135deg, #0088cc, #00acee); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;">
                     <i class="fab fa-telegram"></i> 加入频道
                 </a>
-                <p style="color: var(--gray-text); font-size: 0.9rem; margin-top: 20px; line-height: 1.6;">或手动在Telegram中搜索: @NGAYYDS</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 其他模态弹窗（可以根据需要添加） -->
-    <div id="memoryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">全局内存保护技术</h3>
-                <button class="modal-close" onclick="closeModal('memoryModal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>我们的全局内存保护技术采用以下先进方案：</p>
-                <ul style="margin: 15px 0; padding-left: 20px; color: var(--gray-text); line-height: 1.8;">
-                    <li>实时内存加密，防止检测程序读取</li>
-                    <li>进程伪装技术，隐藏关键操作</li>
-                    <li>反调试保护，阻止逆向分析</li>
-                    <li>内存清理，自动清除痕迹</li>
-                    <li>行为模拟，模拟正常游戏操作</li>
-                </ul>
-                <p>该技术已通过实际测试，有效防止99%以上的检测机制。</p>
+                <p style="color: var(--gray-text); font-size: 0.9rem; margin-top: 20px;">或手动在Telegram中搜索: @NGAYYDS</p>
             </div>
         </div>
     </div>
     
     <!-- 引入外部JavaScript文件 -->
     <script src="script.js"></script>
-    
-    <script>
-        // 加载完成处理
-        window.addEventListener('load', function() {
-            // 隐藏加载屏幕
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen) {
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    document.body.classList.add('loaded');
-                }, 500);
-            }
-            
-            // 添加页面加载完成的类
-            setTimeout(() => {
-                document.body.classList.add('page-loaded');
-            }, 300);
-        });
-        
-        // 如果加载超时，强制显示页面
-        setTimeout(() => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen && loadingScreen.style.display !== 'none') {
-                loadingScreen.style.display = 'none';
-                document.body.classList.add('loaded');
-            }
-        }, 3000);
-        
-        // 移动端触摸优化
-        document.addEventListener('touchstart', function() {}, {passive: true});
-        
-        // 防止双击缩放
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-    </script>
 </body>
 </html>
