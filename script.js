@@ -1,3 +1,5 @@
+// script.js - NGA全防网站功能
+
 // 修复点击特效
 document.addEventListener('click', function(e) {
     const ripple = document.createElement('div');
@@ -231,7 +233,7 @@ function downloadServer(serverType) {
 }
 
 // 下载按钮点击事件
-document.getElementById('mainDownloadBtn').addEventListener('click', function(e) {
+document.getElementById('mainDownloadBtn')?.addEventListener('click', function(e) {
     e.preventDefault();
     
     const downloadModal = document.createElement('div');
