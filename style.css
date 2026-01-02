@@ -29,6 +29,11 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    transition: overflow 0.3s;
+}
+
+body.stacked-card-touching {
+    overflow: hidden;
 }
 
 /* 增强的动态网格背景 */
@@ -163,7 +168,7 @@ body {
     50% { transform: translateY(-20px) rotate(180deg); }
 }
 
-/* 优化后的头部样式 - 移除下载导航项 */
+/* 优化后的头部样式 */
 header {
     padding: 10px 0;
     position: fixed;
@@ -593,12 +598,18 @@ main {
     transition: all 0.4s;
     position: relative;
     flex-shrink: 0;
+    perspective: 1000px;
+    cursor: pointer;
 }
 
 .horizontal-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     border-color: var(--primary-color);
+}
+
+.horizontal-card.flipped {
+    transform: translateY(-8px);
 }
 
 .card-badge {
@@ -724,6 +735,83 @@ main {
     box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
 }
 
+/* 3D翻转卡片样式 */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.flip-card-back {
+    background: var(--dark-card);
+    transform: rotateY(180deg);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.flip-card-back h3 {
+    color: var(--light-text);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.flip-card-back p {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.flip-card-back .flip-details {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    margin-top: 12px;
+    padding: 8px 15px;
+    background: rgba(255, 71, 87, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 71, 87, 0.2);
+}
+
+.flip-close-btn {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flip-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
 /* 特性网格 */
 .features-grid {
     display: grid;
@@ -742,28 +830,17 @@ main {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-}
-
-.feature-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    transform: scaleX(0);
-    transition: transform 0.3s;
-}
-
-.feature-item:hover::before {
-    transform: scaleX(1);
+    perspective: 1000px;
 }
 
 .feature-item:hover {
     border-color: var(--accent-color);
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-item.flipped {
+    transform: translateY(-8px);
 }
 
 .feature-icon {
@@ -859,7 +936,7 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 堆叠卡片区域 - 新增 */
+/* 堆叠卡片区域 */
 .stacked-cards-section {
     margin: 60px 0;
     padding: 20px 0;
@@ -888,6 +965,10 @@ main {
     user-select: none;
     transform-origin: center bottom;
     touch-action: pan-y;
+}
+
+.stacked-card.swiping {
+    transition: none !important;
 }
 
 .stacked-card:nth-child(1) {
@@ -923,10 +1004,6 @@ main {
 
 .stacked-card.active:active {
     cursor: grabbing;
-}
-
-.stacked-card.swiping {
-    transition: none !important;
 }
 
 .stacked-card-image {
@@ -1275,68 +1352,6 @@ footer {
     border-top: 1px solid var(--border-color);
     color: var(--gray-text);
     font-size: 0.85rem;
-}
-
-/* 3D翻转卡片样式 */
-.flip-card {
-    perspective: 1000px;
-    cursor: pointer;
-}
-
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-}
-
-.flip-card.flipped .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.flip-card-back {
-    background: var(--dark-card);
-    transform: rotateY(180deg);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.flip-card-back h3 {
-    color: var(--light-text);
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-}
-
-.flip-card-back p {
-    color: var(--gray-text);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin-bottom: 15px;
-}
-
-.flip-card-back .flip-details {
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    margin-top: 10px;
-}
-
-/* 修复堆叠卡片滑动时的冲突 */
-body.stacked-card-touching {
-    overflow: hidden;
 }
 
 /* 响应式设计 - 优化竖屏适配 */
