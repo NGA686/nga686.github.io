@@ -1630,3 +1630,217 @@ footer {
 button, a {
     -webkit-tap-highlight-color: transparent;
 }
+
+/* 防止滑动时网页滚动 - 针对堆叠卡片区域 */
+.stacked-cards-container {
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* 堆叠卡片触摸优化 */
+.stacked-card {
+    touch-action: manipulation;
+}
+
+/* 轮播图参数优化 */
+.carousel-section {
+    touch-action: pan-y;
+}
+
+.carousel-container {
+    user-select: none;
+}
+
+/* 3D翻转卡片样式 */
+.flip-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+}
+
+.flip-card {
+    width: 100%;
+    height: 300px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.flip-card-front {
+    background: var(--dark-card);
+    border: 1px solid var(--border-color);
+}
+
+.flip-card-back {
+    background: linear-gradient(135deg, var(--dark-card), #1a1f25);
+    transform: rotateY(180deg);
+    border: 1px solid var(--primary-color);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flip-card-image {
+    height: 180px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.flip-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.flip-card:hover .flip-card-image img {
+    transform: scale(1.05);
+}
+
+.flip-card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flip-card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--light-text);
+}
+
+.flip-card-desc {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.flip-card-back .flip-card-title {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.flip-card-back .flip-card-desc {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.flip-card-features {
+    list-style: none;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.flip-card-features li {
+    padding: 5px 0;
+    color: var(--light-text);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flip-card-features li i {
+    color: var(--success-color);
+}
+
+.flip-card-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.flip-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
+.flip-card-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 1;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 轮播图优化参数 */
+.carousel-container {
+    --slide-duration: 1s; /* 轮播过渡时间 */
+    --auto-play-delay: 5000ms; /* 自动轮播延迟 */
+    --slide-easing: ease-in-out; /* 过渡曲线 */
+    --indicator-active-size: 1.3; /* 指示器激活缩放 */
+    --image-zoom-duration: 8s; /* 图片缩放动画时间 */
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .flip-card {
+        height: 280px;
+    }
+    
+    .flip-card-image {
+        height: 160px;
+    }
+    
+    .flip-card-content {
+        padding: 15px;
+    }
+    
+    .flip-card-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* 防止下拉刷新增强 */
+.prevent-scroll {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
