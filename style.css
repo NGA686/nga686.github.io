@@ -871,6 +871,7 @@ main {
     max-width: 320px;
     margin: 0 auto;
     perspective: 1000px;
+    touch-action: pan-y;
 }
 
 .stacked-card {
@@ -886,6 +887,7 @@ main {
     cursor: pointer;
     user-select: none;
     transform-origin: center bottom;
+    touch-action: pan-y;
 }
 
 .stacked-card:nth-child(1) {
@@ -921,6 +923,10 @@ main {
 
 .stacked-card.active:active {
     cursor: grabbing;
+}
+
+.stacked-card.swiping {
+    transition: none !important;
 }
 
 .stacked-card-image {
@@ -1269,6 +1275,68 @@ footer {
     border-top: 1px solid var(--border-color);
     color: var(--gray-text);
     font-size: 0.85rem;
+}
+
+/* 3D翻转卡片样式 */
+.flip-card {
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.flip-card-back {
+    background: var(--dark-card);
+    transform: rotateY(180deg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.flip-card-back h3 {
+    color: var(--light-text);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.flip-card-back p {
+    color: var(--gray-text);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.flip-card-back .flip-details {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    margin-top: 10px;
+}
+
+/* 修复堆叠卡片滑动时的冲突 */
+body.stacked-card-touching {
+    overflow: hidden;
 }
 
 /* 响应式设计 - 优化竖屏适配 */
