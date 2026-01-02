@@ -73,7 +73,7 @@ const Carousel = {
     
     currentSlide: 0,
     interval: null,
-    autoPlayInterval: 4000,
+    autoPlayInterval: 4000, // 轮播速度加快到4秒
     
     // 初始化轮播图
     init: function() {
@@ -286,7 +286,7 @@ const StackedCards = {
         if (nextBtn) nextBtn.addEventListener('click', () => this.nextCard());
     },
     
-    // 触摸开始
+    // 触摸开始 - 修复滑动冲突
     handleTouchStart: function(e) {
         if (this.isAnimating) return;
         this.startY = e.touches[0].clientY;
@@ -296,7 +296,7 @@ const StackedCards = {
         document.body.classList.add('stacked-card-touching');
     },
     
-    // 触摸移动
+    // 触摸移动 - 修复滑动冲突
     handleTouchMove: function(e) {
         if (this.isAnimating) return;
         
@@ -315,7 +315,7 @@ const StackedCards = {
         currentCard.style.transform = `translateY(${deltaY}px) rotate(${deltaY * 0.05}deg)`;
     },
     
-    // 触摸结束
+    // 触摸结束 - 修复滑动冲突
     handleTouchEnd: function(e) {
         if (this.isAnimating) return;
         
@@ -411,11 +411,11 @@ const StackedCards = {
         cards[newIndex].classList.add('active');
         indicators[newIndex].classList.add('active');
         
-        // 更新所有卡片的堆叠位置
+        // 更新卡片位置
         this.updateCardPositions();
     },
     
-    // 更新卡片位置（新增方法）
+    // 更新所有卡片的堆叠位置
     updateCardPositions: function() {
         const cards = document.querySelectorAll('.stacked-card');
         cards.forEach((card, index) => {
@@ -468,28 +468,29 @@ const FlipCards = {
             </div>
         `;
         
-        // 移除原来的点击事件，添加新的翻转事件
-        const button = card.querySelector('.card-btn');
-        if (button) {
-            const originalOnClick = button.getAttribute('onclick');
-            if (originalOnClick) {
-                button.removeAttribute('onclick');
+        // 添加新的翻转事件
+        card.addEventListener('click', (e) => {
+            // 如果点击的是按钮，执行原来的按钮功能
+            if (e.target.closest('.card-btn')) {
+                const button = e.target.closest('.card-btn');
+                const modalName = button.getAttribute('onclick');
+                if (modalName && modalName.includes('showModal')) {
+                    // 提取模态框名称
+                    const modalId = modalName.match(/showModal\('(.+?)'\)/)[1];
+                    Modal.show(modalId);
+                    return;
+                }
             }
             
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
+            // 如果点击的是返回按钮，只翻转不传播
+            if (e.target.closest('.flip-close-btn')) {
                 card.classList.toggle('flipped');
-                
-                // 如果是查看详情按钮，仍执行原始功能
-                if (originalOnClick && originalOnClick.includes('showModal')) {
-                    eval(originalOnClick);
-                }
-            });
-        }
-        
-        // 卡片本身点击也翻转
-        card.addEventListener('click', (e) => {
-            if (e.target === card || !e.target.closest('.card-btn')) {
+                e.stopPropagation();
+                return;
+            }
+            
+            // 其他情况翻转卡片
+            if (!e.target.closest('a') && !e.target.closest('button')) {
                 card.classList.toggle('flipped');
             }
         });
@@ -501,7 +502,7 @@ const FlipCards = {
         const backContent = this.createFeatureBackContent(index);
         
         // 保存原始点击函数
-        const originalOnClick = featureItem.getAttribute('onclick');
+        const originalClick = featureItem.getAttribute('onclick');
         
         featureItem.classList.add('flip-card');
         featureItem.innerHTML = `
@@ -517,14 +518,27 @@ const FlipCards = {
         
         // 添加翻转事件
         featureItem.addEventListener('click', function(e) {
-            if (!e.target.closest('.flip-close-btn')) {
+            // 如果点击的是返回按钮
+            if (e.target.closest('.flip-close-btn')) {
                 this.classList.toggle('flipped');
-                
-                // 如果是加入Telegram按钮，仍执行原始功能
-                if (originalOnClick && originalOnClick.includes('joinTelegram')) {
-                    eval(originalOnClick);
-                }
+                e.stopPropagation();
+                return;
             }
+            
+            // 如果卡片已经翻转，点击返回按钮
+            if (this.classList.contains('flipped')) {
+                return;
+            }
+            
+            // 对于Telegram图标，执行原始功能
+            if (originalClick && originalClick.includes('joinTelegram') && 
+                (e.target.closest('.telegram-icon') || e.target.closest('.feature-title'))) {
+                Navigation.joinTelegram();
+                return;
+            }
+            
+            // 其他情况翻转卡片
+            this.classList.toggle('flipped');
         });
     },
     
@@ -554,8 +568,8 @@ const FlipCards = {
             <h3>${content.title}</h3>
             <p>${content.description}</p>
             <div class="flip-details">${content.details}</div>
-            <button class="flip-close-btn" style="margin-top: 15px; padding: 8px 20px; background: var(--primary-color); color: white; border: none; border-radius: 15px; cursor: pointer;">
-                返回
+            <button class="flip-close-btn">
+                <i class="fas fa-undo"></i> 返回
             </button>
         `;
     },
@@ -591,8 +605,8 @@ const FlipCards = {
             <h3>${content.title}</h3>
             <p>${content.description}</p>
             <div class="flip-details">${content.details}</div>
-            <button class="flip-close-btn" style="margin-top: 15px; padding: 8px 20px; background: var(--primary-color); color: white; border: none; border-radius: 15px; cursor: pointer;">
-                返回
+            <button class="flip-close-btn">
+                <i class="fas fa-undo"></i> 返回
             </button>
         `;
     }
@@ -764,12 +778,30 @@ const Download = {
     // 初始化下载按钮事件
     initDownloadButtons: function() {
         const mainBtn = document.getElementById('mainDownloadBtn');
+        const navBtn = document.getElementById('downloadBtn');
+        
         if (mainBtn) {
             mainBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.main();
             });
         }
+        
+        if (navBtn) {
+            navBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.main();
+            });
+        }
+        
+        // 服务器下载按钮
+        document.querySelectorAll('.vertical-card .card-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const serverType = btn.getAttribute('onclick').match(/downloadServer\('(.+?)'\)/)[1];
+                this.server(serverType);
+            });
+        });
     }
 };
 
@@ -868,9 +900,6 @@ window.goToSlide = Carousel.goTo.bind(Carousel);
 window.prevCard = StackedCards.prevCard.bind(StackedCards);
 window.nextCard = StackedCards.nextCard.bind(StackedCards);
 window.goToCard = StackedCards.goToCard.bind(StackedCards);
-window.flipCard = function(card) {
-    card.classList.toggle('flipped');
-};
 
 // ==================== 页面加载完成 ====================
 document.addEventListener('DOMContentLoaded', () => {
