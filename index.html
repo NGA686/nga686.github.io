@@ -19,7 +19,7 @@
         <div class="floating-element float-3"></div>
     </div>
     
-    <!-- 优化后的头部导航 - 移除下载导航项 -->
+    <!-- 优化后的头部导航 -->
     <header id="mainHeader">
         <div class="container">
             <div class="header-content">
@@ -37,7 +37,6 @@
                     <a href="#"><i class="fas fa-home"></i> 首页</a>
                     <a href="#features"><i class="fas fa-star"></i> 特性</a>
                     <a href="#versions"><i class="fas fa-globe"></i> 服务器</a>
-                    <!-- 下载导航项已移除 -->
                     <a href="https://www.cccimg.com/down.php/3877cae42eff8da8ac4bd65cb5bcfde1.zip" class="download-btn" id="downloadBtn">
                         <i class="fas fa-download"></i> 立即下载
                     </a>
@@ -89,98 +88,62 @@
                 <h2 class="section-title">核心技术</h2>
                 <div class="cards-container">
                     <!-- 卡片1 -->
-                    <div class="horizontal-card flip-card" id="card1">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div class="card-badge">独家</div>
-                                <div class="card-image">
-                                    <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术">
-                                </div>
-                                <div class="card-content">
-                                    <h3 class="card-title">全局内存保护</h3>
-                                    <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
-                                    <ul class="card-features">
-                                        <li><i class="fas fa-check-circle"></i> 实时内存加密</li>
-                                        <li><i class="fas fa-check-circle"></i> 反调试保护</li>
-                                        <li><i class="fas fa-check-circle"></i> 进程隐藏技术</li>
-                                    </ul>
-                                    <button class="card-btn" onclick="showModal('memoryModal'); event.stopPropagation();">
-                                        <i class="fas fa-info-circle"></i> 查看详情
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="flip-card-back">
-                                <h3>内存保护技术详情</h3>
-                                <p>采用动态内存加密技术，实时监控游戏进程，防止第三方检测工具读取关键数据。</p>
-                                <div class="flip-details">支持：实时加密、反调试、进程隐藏</div>
-                                <button class="flip-close-btn" onclick="document.getElementById('card1').classList.remove('flipped'); event.stopPropagation();">
-                                    返回
-                                </button>
-                            </div>
+                    <div class="horizontal-card">
+                        <div class="card-badge">独家</div>
+                        <div class="card-image">
+                            <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">全局内存保护</h3>
+                            <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> 实时内存加密</li>
+                                <li><i class="fas fa-check-circle"></i> 反调试保护</li>
+                                <li><i class="fas fa-check-circle"></i> 进程隐藏技术</li>
+                            </ul>
+                            <button class="card-btn" onclick="showModal('memoryModal')">
+                                <i class="fas fa-info-circle"></i> 查看详情
+                            </button>
                         </div>
                     </div>
                     
                     <!-- 卡片2 -->
-                    <div class="horizontal-card flip-card" id="card2">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div class="card-badge">多服支持</div>
-                                <div class="card-image">
-                                    <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容">
-                                </div>
-                                <div class="card-content">
-                                    <h3 class="card-title">全服务器兼容</h3>
-                                    <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
-                                    <ul class="card-features">
-                                        <li><i class="fas fa-check-circle"></i> 全球服优化</li>
-                                        <li><i class="fas fa-check-circle"></i> 亚洲服专属</li>
-                                        <li><i class="fas fa-check-circle"></i> 实时适配更新</li>
-                                    </ul>
-                                    <button class="card-btn" onclick="showModal('serverModal'); event.stopPropagation();">
-                                        <i class="fas fa-info-circle"></i> 查看详情
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="flip-card-back">
-                                <h3>服务器兼容详情</h3>
-                                <p>针对不同地区的服务器进行专门优化，确保最佳的网络连接和反检测效果。</p>
-                                <div class="flip-details">全球服：低延迟优化 | 亚洲服：本地化适配</div>
-                                <button class="flip-close-btn" onclick="document.getElementById('card2').classList.remove('flipped'); event.stopPropagation();">
-                                    返回
-                                </button>
-                            </div>
+                    <div class="horizontal-card">
+                        <div class="card-badge">多服支持</div>
+                        <div class="card-image">
+                            <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">全服务器兼容</h3>
+                            <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> 全球服优化</li>
+                                <li><i class="fas fa-check-circle"></i> 亚洲服专属</li>
+                                <li><i class="fas fa-check-circle"></i> 实时适配更新</li>
+                            </ul>
+                            <button class="card-btn" onclick="showModal('serverModal')">
+                                <i class="fas fa-info-circle"></i> 查看详情
+                            </button>
                         </div>
                     </div>
                     
                     <!-- 卡片3 -->
-                    <div class="horizontal-card flip-card" id="card3">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div class="card-badge">即将推出</div>
-                                <div class="card-image">
-                                    <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持">
-                                </div>
-                                <div class="card-content">
-                                    <h3 class="card-title">和平精英支持</h3>
-                                    <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
-                                    <ul class="card-features">
-                                        <li><i class="fas fa-clock"></i> 开发中</li>
-                                        <li><i class="fas fa-clock"></i> 预计Q4发布</li>
-                                        <li><i class="fas fa-clock"></i> 内测招募中</li>
-                                    </ul>
-                                    <button class="card-btn" onclick="showModal('peaceModal'); event.stopPropagation();">
-                                        <i class="fas fa-info-circle"></i> 了解更多
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="flip-card-back">
-                                <h3>和平精英支持计划</h3>
-                                <p>正在开发专项保护功能，预计下个版本推出，内测用户可优先体验。</p>
-                                <div class="flip-details">预计发布时间：2024年Q1</div>
-                                <button class="flip-close-btn" onclick="document.getElementById('card3').classList.remove('flipped'); event.stopPropagation();">
-                                    返回
-                                </button>
-                            </div>
+                    <div class="horizontal-card">
+                        <div class="card-badge">即将推出</div>
+                        <div class="card-image">
+                            <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">和平精英支持</h3>
+                            <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-clock"></i> 开发中</li>
+                                <li><i class="fas fa-clock"></i> 预计Q4发布</li>
+                                <li><i class="fas fa-clock"></i> 内测招募中</li>
+                            </ul>
+                            <button class="card-btn" onclick="showModal('peaceModal')">
+                                <i class="fas fa-info-circle"></i> 了解更多
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -191,89 +154,41 @@
         <section class="container">
             <h2 class="section-title">产品优势</h2>
             <div class="features-grid">
-                <div class="feature-item flip-card" id="feature1">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div class="feature-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <h3 class="feature-title">IDA独家全防</h3>
-                            <p class="feature-desc">规避任何禁令，保证您的账号安全无忧。</p>
-                        </div>
-                        <div class="flip-card-back">
-                            <h3>IDA全防技术</h3>
-                            <p>基于逆向工程分析，针对游戏检测机制开发的专属防护方案。</p>
-                            <div class="flip-details">安全率：99.8%</div>
-                            <button class="flip-close-btn" onclick="document.getElementById('feature1').classList.remove('flipped'); event.stopPropagation();">
-                                返回
-                            </button>
-                        </div>
+                <div class="feature-item" onclick="showModal('idaModal')">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
+                    <h3 class="feature-title">IDA独家全防</h3>
+                    <p class="feature-desc">规避任何禁令，保证您的账号安全无忧。</p>
                 </div>
                 
-                <div class="feature-item flip-card" id="feature2">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div class="feature-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <h3 class="feature-title">独家UI优化</h3>
-                            <p class="feature-desc">CPU占用极低，提供流畅的游戏体验。</p>
-                        </div>
-                        <div class="flip-card-back">
-                            <h3>UI优化详情</h3>
-                            <p>极低CPU占用，不影响游戏性能，界面简洁易用。</p>
-                            <div class="flip-details">CPU占用：<5%</div>
-                            <button class="flip-close-btn" onclick="document.getElementById('feature2').classList.remove('flipped'); event.stopPropagation();">
-                                返回
-                            </button>
-                        </div>
+                <div class="feature-item" onclick="showModal('uiModal')">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
                     </div>
+                    <h3 class="feature-title">独家UI优化</h3>
+                    <p class="feature-desc">CPU占用极低，提供流畅的游戏体验。</p>
                 </div>
                 
-                <div class="feature-item flip-card" id="feature3">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div class="feature-icon">
-                                <i class="fas fa-sync-alt"></i>
-                            </div>
-                            <h3 class="feature-title">稳定更新保障</h3>
-                            <p class="feature-desc">确保您的账号不会因为任何禁令封禁。</p>
-                        </div>
-                        <div class="flip-card-back">
-                            <h3>更新保障</h3>
-                            <p>24小时内适配游戏更新，确保不间断保护。</p>
-                            <div class="flip-details">更新频率：实时监控</div>
-                            <button class="flip-close-btn" onclick="document.getElementById('feature3').classList.remove('flipped'); event.stopPropagation();">
-                                返回
-                            </button>
-                        </div>
+                <div class="feature-item" onclick="showModal('updateModal')">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
                     </div>
+                    <h3 class="feature-title">稳定更新保障</h3>
+                    <p class="feature-desc">确保您的账号不会因为任何禁令封禁。</p>
                 </div>
                 
-                <div class="feature-item flip-card" id="feature4">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div class="feature-icon telegram-icon">
-                                <i class="fab fa-telegram"></i>
-                            </div>
-                            <h3 class="feature-title">加入我们</h3>
-                            <p class="feature-desc">点击加入Telegram频道获取最新资讯。</p>
-                        </div>
-                        <div class="flip-card-back">
-                            <h3>Telegram社区</h3>
-                            <p>加入频道获取最新资讯、技术支持和用户交流。</p>
-                            <div class="flip-details">频道：@NGAYYDS</div>
-                            <button class="flip-close-btn" onclick="document.getElementById('feature4').classList.remove('flipped'); event.stopPropagation();">
-                                返回
-                            </button>
-                        </div>
+                <div class="feature-item" onclick="joinTelegram()">
+                    <div class="feature-icon telegram-icon">
+                        <i class="fab fa-telegram"></i>
                     </div>
+                    <h3 class="feature-title">加入我们</h3>
+                    <p class="feature-desc">点击加入Telegram频道获取最新资讯。</p>
                 </div>
             </div>
         </section>
         
-        <!-- 堆叠卡片区域 - 新增 -->
+        <!-- 堆叠卡片区域 -->
         <section class="stacked-cards-section">
             <div class="container">
                 <h2 class="section-title">特色功能展示</h2>
@@ -482,41 +397,5 @@
     
     <!-- 引入外部JavaScript文件 -->
     <script src="script.js"></script>
-    
-    <!-- 内联脚本用于卡片点击翻转 -->
-    <script>
-        // 添加卡片点击翻转功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为卡片添加点击翻转事件
-            const flipCards = document.querySelectorAll('.flip-card');
-            flipCards.forEach(card => {
-                // 如果卡片已经有点击事件，跳过
-                if (!card.hasAttribute('data-flip-initialized')) {
-                    card.addEventListener('click', function(e) {
-                        // 如果点击的是按钮或者返回按钮，不触发翻转
-                        if (e.target.closest('.card-btn') || e.target.closest('.flip-close-btn')) {
-                            return;
-                        }
-                        this.classList.toggle('flipped');
-                    });
-                    card.setAttribute('data-flip-initialized', 'true');
-                }
-            });
-            
-            // 为特性网格的加入Telegram功能添加特殊处理
-            const feature4 = document.getElementById('feature4');
-            if (feature4) {
-                feature4.addEventListener('click', function(e) {
-                    if (!e.target.closest('.flip-close-btn')) {
-                        // 点击正面时执行原有功能（打开Telegram模态框）
-                        if (!this.classList.contains('flipped')) {
-                            joinTelegram();
-                        }
-                        this.classList.toggle('flipped');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>
