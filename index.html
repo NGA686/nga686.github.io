@@ -19,7 +19,7 @@
         <div class="floating-element float-3"></div>
     </div>
     
-    <!-- 优化后的头部导航 - 移除下载导航项 -->
+    <!-- 优化后的头部导航 -->
     <header id="mainHeader">
         <div class="container">
             <div class="header-content">
@@ -37,7 +37,6 @@
                     <a href="#"><i class="fas fa-home"></i> 首页</a>
                     <a href="#features"><i class="fas fa-star"></i> 特性</a>
                     <a href="#versions"><i class="fas fa-globe"></i> 服务器</a>
-                    <!-- 下载导航项已移除 -->
                     <a href="https://www.cccimg.com/down.php/3877cae42eff8da8ac4bd65cb5bcfde1.zip" class="download-btn" id="downloadBtn">
                         <i class="fas fa-download"></i> 立即下载
                     </a>
@@ -83,100 +82,272 @@
             </div>
         </section>
         
-        <!-- 横屏卡片区域 -->
+        <!-- 横屏卡片区域 - 添加3D翻转功能 -->
         <section class="horizontal-cards" id="features">
             <div class="container">
                 <h2 class="section-title">核心技术</h2>
                 <div class="cards-container">
-                    <!-- 卡片1 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">独家</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">全局内存保护</h3>
-                            <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 实时内存加密</li>
-                                <li><i class="fas fa-check-circle"></i> 反调试保护</li>
-                                <li><i class="fas fa-check-circle"></i> 进程隐藏技术</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('memoryModal')">
-                                <i class="fas fa-info-circle"></i> 查看详情
-                            </button>
+                    <!-- 卡片1 - 3D翻转 -->
+                    <div class="horizontal-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="card-badge">独家</div>
+                                <div class="card-image">
+                                    <img src="https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg" alt="内存保护技术">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">全局内存保护</h3>
+                                    <p class="card-desc">实时监控游戏内存状态，防止检测程序读取关键数据，有效避免各种形式的封禁。</p>
+                                    <ul class="card-features">
+                                        <li><i class="fas fa-check-circle"></i> 实时内存加密</li>
+                                        <li><i class="fas fa-check-circle"></i> 反调试保护</li>
+                                        <li><i class="fas fa-check-circle"></i> 进程隐藏技术</li>
+                                    </ul>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-sync-alt"></i> 翻转查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-badge">技术详情</div>
+                                <div class="card-content">
+                                    <h3 class="card-title">全局内存保护技术</h3>
+                                    <div class="back-details">
+                                        <div class="back-item">
+                                            <i class="fas fa-microchip"></i>
+                                            <div>
+                                                <strong>动态加密</strong>
+                                                <p>实时对游戏内存数据进行加密处理</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <div>
+                                                <strong>反检测机制</strong>
+                                                <p>阻止第三方检测工具读取关键数据</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-eye-slash"></i>
+                                            <div>
+                                                <strong>进程隐藏</strong>
+                                                <p>保护进程不被游戏安全系统发现</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-undo"></i> 返回正面
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- 卡片2 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">多服支持</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">全服务器兼容</h3>
-                            <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 全球服优化</li>
-                                <li><i class="fas fa-check-circle"></i> 亚洲服专属</li>
-                                <li><i class="fas fa-check-circle"></i> 实时适配更新</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('serverModal')">
-                                <i class="fas fa-info-circle"></i> 查看详情
-                            </button>
+                    <!-- 卡片2 - 3D翻转 -->
+                    <div class="horizontal-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="card-badge">多服支持</div>
+                                <div class="card-image">
+                                    <img src="https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg" alt="全服务器兼容">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">全服务器兼容</h3>
+                                    <p class="card-desc">支持PUBG全球服、台湾服、日韩服、越南服，针对不同服务器定制优化方案。</p>
+                                    <ul class="card-features">
+                                        <li><i class="fas fa-check-circle"></i> 全球服优化</li>
+                                        <li><i class="fas fa-check-circle"></i> 亚洲服专属</li>
+                                        <li><i class="fas fa-check-circle"></i> 实时适配更新</li>
+                                    </ul>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-sync-alt"></i> 翻转查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-badge">服务器详情</div>
+                                <div class="card-content">
+                                    <h3 class="card-title">服务器支持列表</h3>
+                                    <div class="back-details">
+                                        <div class="back-item">
+                                            <i class="fas fa-globe"></i>
+                                            <div>
+                                                <strong>全球服</strong>
+                                                <p>Steam/国际版PUBG</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-flag"></i>
+                                            <div>
+                                                <strong>日韩服</strong>
+                                                <p>日韩地区专用服务器</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-server"></i>
+                                            <div>
+                                                <strong>台湾服</strong>
+                                                <p>台湾地区低延迟优化</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-wifi"></i>
+                                            <div>
+                                                <strong>越南服</strong>
+                                                <p>越南地区网络优化</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-undo"></i> 返回正面
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- 卡片3 -->
-                    <div class="horizontal-card">
-                        <div class="card-badge">即将推出</div>
-                        <div class="card-image">
-                            <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">和平精英支持</h3>
-                            <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-clock"></i> 开发中</li>
-                                <li><i class="fas fa-clock"></i> 预计Q4发布</li>
-                                <li><i class="fas fa-clock"></i> 内测招募中</li>
-                            </ul>
-                            <button class="card-btn" onclick="showModal('peaceModal')">
-                                <i class="fas fa-info-circle"></i> 了解更多
-                            </button>
+                    <!-- 卡片3 - 3D翻转 -->
+                    <div class="horizontal-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="card-badge">即将推出</div>
+                                <div class="card-image">
+                                    <img src="https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg" alt="和平精英支持">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">和平精英支持</h3>
+                                    <p class="card-desc">正在开发中的和平精英专项保护，预计下个版本推出，敬请期待。</p>
+                                    <ul class="card-features">
+                                        <li><i class="fas fa-clock"></i> 开发中</li>
+                                        <li><i class="fas fa-clock"></i> 预计Q4发布</li>
+                                        <li><i class="fas fa-clock"></i> 内测招募中</li>
+                                    </ul>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-sync-alt"></i> 翻转查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-badge">开发进度</div>
+                                <div class="card-content">
+                                    <h3 class="card-title">和平精英版本进度</h3>
+                                    <div class="progress-info">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 65%"></div>
+                                        </div>
+                                        <p class="progress-text">开发进度: 65%</p>
+                                    </div>
+                                    <div class="back-details">
+                                        <div class="back-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <div>
+                                                <strong>预计发布时间</strong>
+                                                <p>2024年Q4季度</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-users"></i>
+                                            <div>
+                                                <strong>内测名额</strong>
+                                                <p>限100名用户内测</p>
+                                            </div>
+                                        </div>
+                                        <div class="back-item">
+                                            <i class="fas fa-bell"></i>
+                                            <div>
+                                                <strong>订阅通知</strong>
+                                                <p>加入Telegram获取最新消息</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-undo"></i> 返回正面
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         
-        <!-- 特性网格 -->
+        <!-- 特性网格 - 添加3D翻转 -->
         <section class="container">
             <h2 class="section-title">产品优势</h2>
             <div class="features-grid">
-                <div class="feature-item" onclick="showModal('idaModal')">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                <div class="feature-item flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="feature-title">IDA独家全防</h3>
+                            <p class="feature-desc">规避任何禁令，保证您的账号安全无忧。</p>
+                            <div class="flip-hint">点击翻转查看详情</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="feature-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h3 class="feature-title">IDA技术详解</h3>
+                            <p class="feature-desc">基于IDA Pro分析引擎，深度逆向游戏检测机制，实现精准规避。</p>
+                            <ul class="back-features">
+                                <li><i class="fas fa-check"></i> 动态代码混淆</li>
+                                <li><i class="fas fa-check"></i> 行为模式伪装</li>
+                                <li><i class="fas fa-check"></i> 实时策略调整</li>
+                            </ul>
+                        </div>
                     </div>
-                    <h3 class="feature-title">IDA独家全防</h3>
-                    <p class="feature-desc">规避任何禁令，保证您的账号安全无忧。</p>
                 </div>
                 
-                <div class="feature-item" onclick="showModal('uiModal')">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
+                <div class="feature-item flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3 class="feature-title">独家UI优化</h3>
+                            <p class="feature-desc">CPU占用极低，提供流畅的游戏体验。</p>
+                            <div class="flip-hint">点击翻转查看详情</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="feature-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h3 class="feature-title">性能优化详情</h3>
+                            <p class="feature-desc">轻量级UI设计，CPU占用率低于2%，内存占用小于50MB。</p>
+                            <ul class="back-features">
+                                <li><i class="fas fa-check"></i> CPU占用: <2%</li>
+                                <li><i class="fas fa-check"></i> 内存占用: <50MB</li>
+                                <li><i class="fas fa-check"></i> 启动时间: <3秒</li>
+                            </ul>
+                        </div>
                     </div>
-                    <h3 class="feature-title">独家UI优化</h3>
-                    <p class="feature-desc">CPU占用极低，提供流畅的游戏体验。</p>
                 </div>
                 
-                <div class="feature-item" onclick="showModal('updateModal')">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
+                <div class="feature-item flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="feature-icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <h3 class="feature-title">稳定更新保障</h3>
+                            <p class="feature-desc">确保您的账号不会因为任何禁令封禁。</p>
+                            <div class="flip-hint">点击翻转查看详情</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="feature-icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <h3 class="feature-title">更新策略</h3>
+                            <p class="feature-desc">24小时内响应游戏更新，48小时内发布适配版本。</p>
+                            <ul class="back-features">
+                                <li><i class="fas fa-check"></i> 24小时响应</li>
+                                <li><i class="fas fa-check"></i> 48小时适配</li>
+                                <li><i class="fas fa-check"></i> 7×24小时监控</li>
+                            </ul>
+                        </div>
                     </div>
-                    <h3 class="feature-title">稳定更新保障</h3>
-                    <p class="feature-desc">确保您的账号不会因为任何禁令封禁。</p>
                 </div>
                 
                 <div class="feature-item" onclick="joinTelegram()">
@@ -189,7 +360,7 @@
             </div>
         </section>
         
-        <!-- 堆叠卡片区域 - 新增 -->
+        <!-- 堆叠卡片区域 - 改进交互 -->
         <section class="stacked-cards-section">
             <div class="container">
                 <h2 class="section-title">特色功能展示</h2>
@@ -210,70 +381,155 @@
             </div>
         </section>
         
-        <!-- 3D翻转卡片区域 - 新增 -->
-        <!-- 此区域将由JavaScript动态生成 -->
-        
         <!-- 竖屏卡片区域 - 改为服务器版本 -->
         <section class="vertical-cards" id="versions">
             <div class="container">
                 <h2 class="section-title">支持服务器版本</h2>
                 <div class="cards-grid">
                     <!-- 全球服 -->
-                    <div class="vertical-card">
-                        <div class="server-badge">推荐</div>
-                        <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_3.jpg" alt="全球服">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">PUBG全球服</h3>
-                            <p class="card-desc">专为全球服优化的版本，支持所有地区玩家。</p>
-                            <button class="card-btn" onclick="downloadServer('global')">
-                                <i class="fas fa-download"></i> 下载全球服版
-                            </button>
+                    <div class="vertical-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="server-badge">推荐</div>
+                                <div class="card-image">
+                                    <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_3.jpg" alt="全球服">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">PUBG全球服</h3>
+                                    <p class="card-desc">专为全球服优化的版本，支持所有地区玩家。</p>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-info-circle"></i> 查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-content">
+                                    <h3 class="card-title">全球服详情</h3>
+                                    <div class="server-details">
+                                        <p><strong>支持地区:</strong> 全球范围</p>
+                                        <p><strong>适配版本:</strong> Steam/国际版</p>
+                                        <p><strong>优化特性:</strong></p>
+                                        <ul class="server-features">
+                                            <li>多语言界面支持</li>
+                                            <li>全球节点优化</li>
+                                            <li>跨区域匹配优化</li>
+                                        </ul>
+                                    </div>
+                                    <button class="card-btn" onclick="downloadServer('global')">
+                                        <i class="fas fa-download"></i> 下载全球服版
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- 日韩服 -->
-                    <div class="vertical-card">
-                        <div class="server-badge">热门</div>
-                        <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_11.jpg" alt="日韩服">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">PUBG日韩服</h3>
-                            <p class="card-desc">针对日韩服务器优化，低延迟高性能。</p>
-                            <button class="card-btn" onclick="downloadServer('japan')">
-                                <i class="fas fa-download"></i> 下载日韩服版
-                            </button>
+                    <div class="vertical-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="server-badge">热门</div>
+                                <div class="card-image">
+                                    <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_11.jpg" alt="日韩服">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">PUBG日韩服</h3>
+                                    <p class="card-desc">针对日韩服务器优化，低延迟高性能。</p>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-info-circle"></i> 查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-content">
+                                    <h3 class="card-title">日韩服详情</h3>
+                                    <div class="server-details">
+                                        <p><strong>支持地区:</strong> 日本、韩国</p>
+                                        <p><strong>适配版本:</strong> 日韩专属版本</p>
+                                        <p><strong>优化特性:</strong></p>
+                                        <ul class="server-features">
+                                            <li>日语/韩语界面</li>
+                                            <li>本地服务器优化</li>
+                                            <li>延迟低于30ms</li>
+                                        </ul>
+                                    </div>
+                                    <button class="card-btn" onclick="downloadServer('japan')">
+                                        <i class="fas fa-download"></i> 下载日韩服版
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- 台湾服 -->
-                    <div class="vertical-card">
-                        <div class="server-badge">稳定</div>
-                        <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_25.jpg" alt="台湾服">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">PUBG台湾服</h3>
-                            <p class="card-desc">台湾地区专属优化，稳定连接不卡顿。</p>
-                            <button class="card-btn" onclick="downloadServer('taiwan')">
-                                <i class="fas fa-download"></i> 下载台湾服版
-                            </button>
+                    <div class="vertical-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="server-badge">稳定</div>
+                                <div class="card-image">
+                                    <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_25.jpg" alt="台湾服">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">PUBG台湾服</h3>
+                                    <p class="card-desc">台湾地区专属优化，稳定连接不卡顿。</p>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-info-circle"></i> 查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-content">
+                                    <h3 class="card-title">台湾服详情</h3>
+                                    <div class="server-details">
+                                        <p><strong>支持地区:</strong> 台湾地区</p>
+                                        <p><strong>适配版本:</strong> 台湾专属版本</p>
+                                        <p><strong>优化特性:</strong></p>
+                                        <ul class="server-features">
+                                            <li>繁体中文界面</li>
+                                            <li>本地节点加速</li>
+                                            <li>电信/联通优化</li>
+                                        </ul>
+                                    </div>
+                                    <button class="card-btn" onclick="downloadServer('taiwan')">
+                                        <i class="fas fa-download"></i> 下载台湾服版
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- 越南服 -->
-                    <div class="vertical-card">
-                        <div class="card-image">
-                            <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_29.jpg" alt="越南服">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">PUBG越南服</h3>
-                            <p class="card-desc">越南地区专属版本，完美兼容当地网络。</p>
-                            <button class="card-btn" onclick="downloadServer('vietnam')">
-                                <i class="fas fa-download"></i> 下载越南服版
-                            </button>
+                    <div class="vertical-card flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="card-image">
+                                    <img src="https://p2.a.yximgs.com/ufile/atlas/NTE5MDM5ODczNjU4NTAxOTgwNl8xNzUwMjUwOTQzOTU5_29.jpg" alt="越南服">
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">PUBG越南服</h3>
+                                    <p class="card-desc">越南地区专属版本，完美兼容当地网络。</p>
+                                    <button class="card-btn flip-trigger">
+                                        <i class="fas fa-info-circle"></i> 查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="card-content">
+                                    <h3 class="card-title">越南服详情</h3>
+                                    <div class="server-details">
+                                        <p><strong>支持地区:</strong> 越南</p>
+                                        <p><strong>适配版本:</strong> 越南专属版本</p>
+                                        <p><strong>优化特性:</strong></p>
+                                        <ul class="server-features">
+                                            <li>越南语界面</li>
+                                            <li>本地网络优化</li>
+                                            <li>移动网络支持</li>
+                                        </ul>
+                                    </div>
+                                    <button class="card-btn" onclick="downloadServer('vietnam')">
+                                        <i class="fas fa-download"></i> 下载越南服版
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
