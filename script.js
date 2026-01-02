@@ -1,4 +1,4 @@
-// script.js - NGA全防网站功能 - 模块化优化版
+// script.js - NGA全防网站功能 - 改进版
 
 // ==================== 工具函数 ====================
 const Utils = {
@@ -38,42 +38,66 @@ const Utils = {
                 setTimeout(() => inThrottle = false, limit);
             }
         };
+    },
+    
+    // 阻止默认滚动行为
+    preventScroll: function(e) {
+        if (e.target.closest('.stacked-cards-container') || 
+            e.target.closest('.stacked-card')) {
+            e.preventDefault();
+        }
     }
 };
 
-// ==================== 轮播图模块 ====================
+// ==================== 轮播图模块 - 参数优化 ====================
 const Carousel = {
     data: [
         { 
             url: "https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg", 
-            title: "专业级保护",
-            subtitle: "全球领先的游戏安全解决方案"
+            title: "NGA全防 - 专业级保护",
+            subtitle: "全球领先的游戏安全解决方案",
+            zoom: 1.08  // 图片缩放参数
         },
         { 
             url: "https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg", 
             title: "多服务器支持",
-            subtitle: "全球服、日韩服、台湾服、越南服"
+            subtitle: "全球服、日韩服、台湾服、越南服全面覆盖",
+            zoom: 1.05
         },
         { 
             url: "https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg", 
-            title: "内存加密技术",
-            subtitle: "实时保护游戏数据安全"
+            title: "高级内存加密",
+            subtitle: "实时保护游戏数据，防止检测",
+            zoom: 1.1
         },
         { 
             url: "https://wp.mcyan.cn/view.php/86131cb378be166e8e3b402b318f92d4.jpeg", 
-            title: "全天候防护",
-            subtitle: "24/7监控您的游戏账号"
+            title: "实时防护监控",
+            subtitle: "24/7全天候保护您的游戏账号",
+            zoom: 1.06
         },
         { 
             url: "https://wp.mcyan.cn/view.php/bf607ad1c7f64008aafaa1fbd5065094.jpeg", 
-            title: "稳定更新",
-            subtitle: "持续应对游戏检测机制"
+            title: "稳定更新保障",
+            subtitle: "持续更新，应对各种检测机制",
+            zoom: 1.07
         }
     ],
     
+    // 可配置参数
+    config: {
+        slideDuration: 1000,        // 轮播过渡时间(ms)
+        autoPlayDelay: 5000,        // 自动轮播延迟(ms)
+        slideEasing: 'ease-in-out', // 过渡曲线
+        indicatorActiveScale: 1.3,  // 指示器激活缩放
+        imageZoomDuration: 8000,    // 图片缩放动画时间(ms)
+        touchSensitivity: 50        // 触摸灵敏度(像素)
+    },
+    
     currentSlide: 0,
     interval: null,
-    autoPlayInterval: 4000, // 轮播速度加快到4秒
+    touchStartX: 0,
+    touchEndX: 0,
     
     // 初始化轮播图
     init: function() {
@@ -96,6 +120,9 @@ const Carousel = {
         container.innerHTML = carouselHTML;
         indicators.innerHTML = indicatorsHTML;
         
+        // 应用CSS自定义属性
+        this.applyCustomProperties();
+        
         // 自动轮播
         this.start();
         
@@ -103,12 +130,26 @@ const Carousel = {
         this.addEventListeners();
     },
     
+    // 应用自定义属性
+    applyCustomProperties: function() {
+        const container = document.querySelector('.carousel-container');
+        if (container) {
+            container.style.setProperty('--slide-duration', `${this.config.slideDuration}ms`);
+            container.style.setProperty('--auto-play-delay', `${this.config.autoPlayDelay}ms`);
+            container.style.setProperty('--slide-easing', this.config.slideEasing);
+            container.style.setProperty('--indicator-active-size', this.config.indicatorActiveScale);
+            container.style.setProperty('--image-zoom-duration', `${this.config.imageZoomDuration}ms`);
+        }
+    },
+    
     // 创建轮播项HTML
     createSlideHTML: function(item, index) {
         return `
-            <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+            <div class="carousel-slide ${index === 0 ? 'active' : ''}" 
+                 style="transition-duration: ${this.config.slideDuration}ms; transition-timing-function: ${this.config.slideEasing};">
                 <div class="carousel-image">
-                    <img src="${item.url}" alt="${item.title}" loading="lazy">
+                    <img src="${item.url}" alt="${item.title}" 
+                         style="transition-duration: ${this.config.imageZoomDuration}ms; transform: scale(${item.zoom});">
                 </div>
                 <div class="carousel-info">
                     <div class="carousel-title">${item.title}</div>
@@ -120,7 +161,9 @@ const Carousel = {
     
     // 创建指示器HTML
     createIndicatorHTML: function(index) {
-        return `<div class="carousel-indicator ${index === 0 ? 'active' : ''}" onclick="Carousel.goTo(${index})"></div>`;
+        return `<div class="carousel-indicator ${index === 0 ? 'active' : ''}" 
+                      onclick="Carousel.goTo(${index})"
+                      style="transform: scale(${index === 0 ? this.config.indicatorActiveScale : 1});"></div>`;
     },
     
     // 创建控制按钮HTML
@@ -137,15 +180,45 @@ const Carousel = {
     addEventListeners: function() {
         const container = document.querySelector('.carousel-container');
         if (container) {
+            // 鼠标事件
             container.addEventListener('mouseenter', () => this.stop());
             container.addEventListener('mouseleave', () => this.start());
+            
+            // 触摸事件 - 优化滑动
+            container.addEventListener('touchstart', (e) => {
+                this.touchStartX = e.touches[0].clientX;
+                this.stop(); // 触摸时停止自动轮播
+            }, { passive: true });
+            
+            container.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // 防止页面滚动
+            }, { passive: false });
+            
+            container.addEventListener('touchend', (e) => {
+                this.touchEndX = e.changedTouches[0].clientX;
+                this.handleSwipe();
+                setTimeout(() => this.start(), 3000); // 3秒后恢复自动轮播
+            });
+        }
+    },
+    
+    // 处理滑动
+    handleSwipe: function() {
+        const diff = this.touchStartX - this.touchEndX;
+        
+        if (Math.abs(diff) > this.config.touchSensitivity) {
+            if (diff > 0) {
+                this.next();
+            } else {
+                this.prev();
+            }
         }
     },
     
     // 开始自动轮播
     start: function() {
         if (this.interval) clearInterval(this.interval);
-        this.interval = setInterval(() => this.next(), this.autoPlayInterval);
+        this.interval = setInterval(() => this.next(), this.config.autoPlayDelay);
     },
     
     // 停止自动轮播
@@ -158,13 +231,17 @@ const Carousel = {
         const slides = document.querySelectorAll('.carousel-slide');
         const indicators = document.querySelectorAll('.carousel-indicator');
         
+        if (slides.length === 0) return;
+        
         slides[this.currentSlide].classList.remove('active');
         indicators[this.currentSlide].classList.remove('active');
+        indicators[this.currentSlide].style.transform = 'scale(1)';
         
         this.currentSlide = (this.currentSlide + 1) % slides.length;
         
         slides[this.currentSlide].classList.add('active');
         indicators[this.currentSlide].classList.add('active');
+        indicators[this.currentSlide].style.transform = `scale(${this.config.indicatorActiveScale})`;
     },
     
     // 上一张
@@ -172,13 +249,17 @@ const Carousel = {
         const slides = document.querySelectorAll('.carousel-slide');
         const indicators = document.querySelectorAll('.carousel-indicator');
         
+        if (slides.length === 0) return;
+        
         slides[this.currentSlide].classList.remove('active');
         indicators[this.currentSlide].classList.remove('active');
+        indicators[this.currentSlide].style.transform = 'scale(1)';
         
         this.currentSlide = (this.currentSlide - 1 + slides.length) % slides.length;
         
         slides[this.currentSlide].classList.add('active');
         indicators[this.currentSlide].classList.add('active');
+        indicators[this.currentSlide].style.transform = `scale(${this.config.indicatorActiveScale})`;
     },
     
     // 跳转到指定索引
@@ -186,19 +267,23 @@ const Carousel = {
         const slides = document.querySelectorAll('.carousel-slide');
         const indicators = document.querySelectorAll('.carousel-indicator');
         
+        if (slides.length === 0 || index < 0 || index >= slides.length) return;
+        
         slides[this.currentSlide].classList.remove('active');
         indicators[this.currentSlide].classList.remove('active');
+        indicators[this.currentSlide].style.transform = 'scale(1)';
         
         this.currentSlide = index;
         
         slides[this.currentSlide].classList.add('active');
         indicators[this.currentSlide].classList.add('active');
+        indicators[this.currentSlide].style.transform = `scale(${this.config.indicatorActiveScale})`;
         
         this.start();
     }
 };
 
-// ==================== 堆叠卡片模块 ====================
+// ==================== 堆叠卡片模块 - 改进版 ====================
 const StackedCards = {
     data: [
         {
@@ -226,7 +311,7 @@ const StackedCards = {
     currentIndex: 0,
     isAnimating: false,
     startY: 0,
-    startTime: 0,
+    isTouching: false,
     
     // 初始化堆叠卡片
     init: function() {
@@ -243,6 +328,9 @@ const StackedCards = {
         
         container.innerHTML = cardsHTML;
         document.getElementById('stackedIndicators').innerHTML = indicatorsHTML;
+        
+        // 初始化卡片位置
+        this.updateCardsPosition();
         
         // 添加事件监听
         this.addEventListeners();
@@ -265,92 +353,113 @@ const StackedCards = {
     
     // 创建指示器HTML
     createStackedIndicatorHTML: function(index) {
-        return `<div class="stacked-indicator ${index === 0 ? 'active' : ''}" onclick="StackedCards.goToCard(${index})"></div>`;
+        return `<div class="stacked-indicator ${index === 0 ? 'active' : ''}" 
+                      onclick="StackedCards.goToCard(${index})"></div>`;
     },
     
-    // 添加事件监听
+    // 添加事件监听 - 防止网页滚动
     addEventListeners: function() {
         const cards = document.querySelectorAll('.stacked-card');
         const prevBtn = document.getElementById('stackedPrevBtn');
         const nextBtn = document.getElementById('stackedNextBtn');
+        const container = document.querySelector('.stacked-cards-container');
         
-        // 卡片触摸事件
+        // 卡片触摸事件 - 阻止默认滚动行为
         cards.forEach(card => {
-            card.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
-            card.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-            card.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+            card.addEventListener('touchstart', (e) => {
+                this.handleTouchStart(e);
+                // 阻止事件冒泡，防止页面滚动
+                e.stopPropagation();
+            }, { passive: true });
+            
+            card.addEventListener('touchmove', (e) => {
+                this.handleTouchMove(e);
+                // 阻止事件冒泡和默认行为，防止页面滚动
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
+            
+            card.addEventListener('touchend', (e) => {
+                this.handleTouchEnd(e);
+                // 阻止事件冒泡
+                e.stopPropagation();
+            });
         });
+        
+        // 容器触摸事件 - 防止页面滚动
+        if (container) {
+            container.addEventListener('touchmove', (e) => {
+                // 允许垂直滚动，但阻止水平滚动
+                if (Math.abs(e.touches[0].clientX - this.startY) > 10) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
         
         // 按钮事件
         if (prevBtn) prevBtn.addEventListener('click', () => this.prevCard());
         if (nextBtn) nextBtn.addEventListener('click', () => this.nextCard());
+        
+        // 鼠标滚轮事件
+        if (container) {
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY > 0) {
+                    this.nextCard();
+                } else {
+                    this.prevCard();
+                }
+            }, { passive: false });
+        }
     },
     
-    // 触摸开始 - 修复滑动冲突
+    // 触摸开始
     handleTouchStart: function(e) {
         if (this.isAnimating) return;
+        this.isTouching = true;
         this.startY = e.touches[0].clientY;
-        this.startTime = Date.now();
-        
-        // 添加类名防止页面滚动
-        document.body.classList.add('stacked-card-touching');
+        document.body.classList.add('prevent-scroll'); // 防止页面滚动
     },
     
-    // 触摸移动 - 修复滑动冲突
+    // 触摸移动
     handleTouchMove: function(e) {
-        if (this.isAnimating) return;
-        
-        const currentY = e.touches[0].clientY;
-        const deltaY = currentY - this.startY;
-        
-        // 如果垂直滑动距离较大，阻止页面滚动
-        if (Math.abs(deltaY) > 10) {
-            e.preventDefault();
-        }
-        
+        if (this.isAnimating || !this.isTouching) return;
         const currentCard = document.querySelector('.stacked-card.active');
         if (!currentCard) return;
         
-        currentCard.classList.add('swiping');
-        currentCard.style.transform = `translateY(${deltaY}px) rotate(${deltaY * 0.05}deg)`;
+        const deltaY = e.touches[0].clientY - this.startY;
+        // 限制最大拖动距离
+        const maxDelta = 100;
+        const limitedDelta = Math.max(-maxDelta, Math.min(maxDelta, deltaY));
+        
+        currentCard.style.transform = `translateY(${limitedDelta}px) rotate(${limitedDelta * 0.05}deg)`;
     },
     
-    // 触摸结束 - 修复滑动冲突
+    // 触摸结束
     handleTouchEnd: function(e) {
-        if (this.isAnimating) return;
+        if (this.isAnimating || !this.isTouching) return;
         
         const deltaY = e.changedTouches[0].clientY - this.startY;
-        const deltaTime = Date.now() - this.startTime;
-        const velocity = Math.abs(deltaY) / deltaTime;
-        const threshold = velocity > 0.3 ? 30 : 50;
-        
-        const currentCard = document.querySelector('.stacked-card.active');
-        if (currentCard) {
-            currentCard.classList.remove('swiping');
-        }
-        
-        // 移除防止滚动的类名
-        document.body.classList.remove('stacked-card-touching');
+        const threshold = 50;
         
         if (Math.abs(deltaY) > threshold) {
-            e.preventDefault();
             if (deltaY > 0) {
                 this.prevCard();
             } else {
                 this.nextCard();
             }
-        } else if (currentCard) {
-            // 复位动画
-            currentCard.style.transition = 'all 0.3s ease';
-            currentCard.style.transform = '';
-            
-            setTimeout(() => {
-                if (currentCard) {
-                    currentCard.style.transition = '';
-                    this.updateCardPositions();
-                }
-            }, 300);
+        } else {
+            // 复位
+            const currentCard = document.querySelector('.stacked-card.active');
+            if (currentCard) {
+                currentCard.style.transform = '';
+            }
         }
+        
+        this.isTouching = false;
+        setTimeout(() => {
+            document.body.classList.remove('prevent-scroll'); // 恢复页面滚动
+        }, 100);
     },
     
     // 下一张卡片
@@ -361,7 +470,7 @@ const StackedCards = {
         const oldIndex = this.currentIndex;
         this.currentIndex++;
         
-        this.updateCards(oldIndex, this.currentIndex);
+        this.updateCardsPosition(oldIndex, this.currentIndex);
         
         setTimeout(() => {
             this.isAnimating = false;
@@ -376,7 +485,7 @@ const StackedCards = {
         const oldIndex = this.currentIndex;
         this.currentIndex--;
         
-        this.updateCards(oldIndex, this.currentIndex);
+        this.updateCardsPosition(oldIndex, this.currentIndex);
         
         setTimeout(() => {
             this.isAnimating = false;
@@ -391,33 +500,38 @@ const StackedCards = {
         const oldIndex = this.currentIndex;
         this.currentIndex = index;
         
-        this.updateCards(oldIndex, this.currentIndex);
+        this.updateCardsPosition(oldIndex, this.currentIndex);
         
         setTimeout(() => {
             this.isAnimating = false;
         }, 600);
     },
     
-    // 更新卡片显示
-    updateCards: function(oldIndex, newIndex) {
+    // 更新卡片位置
+    updateCardsPosition: function(oldIndex, newIndex) {
         const cards = document.querySelectorAll('.stacked-card');
         const indicators = document.querySelectorAll('.stacked-indicator');
         
         // 移除旧的活动状态
-        cards[oldIndex].classList.remove('active');
-        indicators[oldIndex].classList.remove('active');
+        if (oldIndex !== undefined && cards[oldIndex]) {
+            cards[oldIndex].classList.remove('active');
+            cards[oldIndex].style.transform = '';
+        }
+        
+        if (oldIndex !== undefined && indicators[oldIndex]) {
+            indicators[oldIndex].classList.remove('active');
+        }
         
         // 添加新的活动状态
-        cards[newIndex].classList.add('active');
-        indicators[newIndex].classList.add('active');
+        if (cards[this.currentIndex]) {
+            cards[this.currentIndex].classList.add('active');
+        }
         
-        // 更新卡片位置
-        this.updateCardPositions();
-    },
-    
-    // 更新所有卡片的堆叠位置
-    updateCardPositions: function() {
-        const cards = document.querySelectorAll('.stacked-card');
+        if (indicators[this.currentIndex]) {
+            indicators[this.currentIndex].classList.add('active');
+        }
+        
+        // 更新所有卡片的堆叠位置
         cards.forEach((card, index) => {
             const cardIndex = parseInt(card.dataset.index);
             const zIndex = this.data.length - Math.abs(cardIndex - this.currentIndex);
@@ -430,185 +544,177 @@ const StackedCards = {
             card.style.transform = `translateY(${offset}px) scale(${scale})`;
             card.style.filter = `blur(${blur}px)`;
             card.style.opacity = opacity;
+            card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
         });
     }
 };
 
 // ==================== 3D翻转卡片模块 ====================
 const FlipCards = {
-    // 初始化所有可翻转的卡片
+    // 翻转卡片数据
+    data: [
+        {
+            frontImage: "https://wp.mcyan.cn/view.php/9d3413034063038570b5758569ffb071.jpeg",
+            frontTitle: "内存保护技术",
+            frontDesc: "点击查看详细技术参数",
+            backTitle: "内存保护详解",
+            backDesc: "采用多层内存加密技术，实时监控游戏进程，防止检测工具读取关键数据。",
+            features: [
+                "实时内存加密",
+                "反调试保护",
+                "进程隐藏技术",
+                "内存混淆算法"
+            ],
+            badge: "独家"
+        },
+        {
+            frontImage: "https://wp.mcyan.cn/view.php/83446ef89944511a636216938d16feed.jpeg",
+            frontTitle: "多服务器支持",
+            frontDesc: "点击查看服务器详情",
+            backTitle: "服务器兼容性",
+            backDesc: "全面支持PUBG所有主流服务器，针对不同地区进行优化适配。",
+            features: [
+                "全球服优化",
+                "亚洲服专属",
+                "低延迟连接",
+                "实时适配更新"
+            ],
+            badge: "多服"
+        },
+        {
+            frontImage: "https://wp.mcyan.cn/view.php/a33a8ff681ca1cecd7b8c816dca46247.jpeg",
+            frontTitle: "安全稳定性",
+            frontDesc: "点击查看安全数据",
+            backTitle: "安全性能指标",
+            backDesc: "经过严格测试，确保99.8%的安全率，持续监控和更新防护机制。",
+            features: [
+                "99.8%安全率",
+                "24/7监控",
+                "实时威胁检测",
+                "自动更新防护"
+            ],
+            badge: "稳定"
+        }
+    ],
+    
+    // 初始化3D翻转卡片
     init: function() {
-        // 为横屏卡片添加翻转功能
-        const horizontalCards = document.querySelectorAll('.horizontal-card');
-        horizontalCards.forEach((card, index) => {
-            this.convertToFlipCard(card, index);
-        });
+        // 创建翻转卡片容器
+        const flipSection = document.createElement('section');
+        flipSection.className = 'container';
+        flipSection.innerHTML = `
+            <h2 class="section-title">核心技术详解</h2>
+            <div class="flip-card-container" id="flipCardContainer"></div>
+        `;
         
-        // 为特性网格卡片添加翻转功能
-        const featureItems = document.querySelectorAll('.feature-item');
-        featureItems.forEach((item, index) => {
-            this.convertFeatureToFlipCard(item, index);
-        });
+        // 插入到特性网格之后
+        const featuresGrid = document.querySelector('.features-grid');
+        if (featuresGrid && featuresGrid.parentNode) {
+            featuresGrid.parentNode.insertBefore(flipSection, featuresGrid.nextSibling);
+        }
+        
+        // 生成翻转卡片
+        this.renderFlipCards();
     },
     
-    // 转换普通卡片为翻转卡片
-    convertToFlipCard: function(card, index) {
-        const frontContent = card.innerHTML;
-        const backContent = this.createBackContent(index);
+    // 渲染翻转卡片
+    renderFlipCards: function() {
+        const container = document.getElementById('flipCardContainer');
+        if (!container) return;
         
-        card.classList.add('flip-card');
-        card.innerHTML = `
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    ${frontContent}
-                </div>
-                <div class="flip-card-back">
-                    ${backContent}
+        let cardsHTML = '';
+        
+        this.data.forEach((item, index) => {
+            cardsHTML += this.createFlipCardHTML(item, index);
+        });
+        
+        container.innerHTML = cardsHTML;
+        
+        // 添加点击事件
+        this.addFlipCardListeners();
+    },
+    
+    // 创建翻转卡片HTML
+    createFlipCardHTML: function(item, index) {
+        return `
+            <div class="flip-card" data-index="${index}">
+                ${item.badge ? `<div class="flip-card-badge">${item.badge}</div>` : ''}
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="flip-card-image">
+                            <img src="${item.frontImage}" alt="${item.frontTitle}">
+                        </div>
+                        <div class="flip-card-content">
+                            <h3 class="flip-card-title">${item.frontTitle}</h3>
+                            <p class="flip-card-desc">${item.frontDesc}</p>
+                            <div style="margin-top: 15px; color: var(--primary-color); font-size: 0.8rem;">
+                                <i class="fas fa-hand-pointer"></i> 点击翻转查看详情
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="flip-card-content">
+                            <h3 class="flip-card-title">${item.backTitle}</h3>
+                            <p class="flip-card-desc">${item.backDesc}</p>
+                            
+                            <ul class="flip-card-features">
+                                ${item.features.map(feature => 
+                                    `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
+                                ).join('')}
+                            </ul>
+                            
+                            <button class="flip-card-btn" onclick="FlipCards.closeFlipCard(${index})">
+                                <i class="fas fa-undo"></i> 返回正面
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
+    },
+    
+    // 添加翻转卡片事件监听
+    addFlipCardListeners: function() {
+        const flipCards = document.querySelectorAll('.flip-card');
         
-        // 添加新的翻转事件
-        card.addEventListener('click', (e) => {
-            // 如果点击的是按钮，执行原来的按钮功能
-            if (e.target.closest('.card-btn')) {
-                const button = e.target.closest('.card-btn');
-                const modalName = button.getAttribute('onclick');
-                if (modalName && modalName.includes('showModal')) {
-                    // 提取模态框名称
-                    const modalId = modalName.match(/showModal\('(.+?)'\)/)[1];
-                    Modal.show(modalId);
-                    return;
-                }
-            }
+        flipCards.forEach(card => {
+            // 点击翻转
+            card.addEventListener('click', (e) => {
+                // 排除按钮点击
+                if (e.target.closest('.flip-card-btn')) return;
+                
+                const index = parseInt(card.dataset.index);
+                this.toggleFlipCard(index);
+            });
             
-            // 如果点击的是返回按钮，只翻转不传播
-            if (e.target.closest('.flip-close-btn')) {
-                card.classList.toggle('flipped');
-                e.stopPropagation();
-                return;
-            }
-            
-            // 其他情况翻转卡片
-            if (!e.target.closest('a') && !e.target.closest('button')) {
-                card.classList.toggle('flipped');
+            // 触摸事件
+            card.addEventListener('touchstart', (e) => {
+                e.stopPropagation(); // 阻止事件冒泡
+            }, { passive: true });
+        });
+    },
+    
+    // 切换翻转卡片状态
+    toggleFlipCard: function(index) {
+        const card = document.querySelector(`.flip-card[data-index="${index}"]`);
+        if (!card) return;
+        
+        card.classList.toggle('flipped');
+        
+        // 如果有其他翻转的卡片，先翻回来
+        document.querySelectorAll('.flip-card').forEach((otherCard, otherIndex) => {
+            if (otherIndex !== index && otherCard.classList.contains('flipped')) {
+                otherCard.classList.remove('flipped');
             }
         });
     },
     
-    // 转换特性卡片为翻转卡片
-    convertFeatureToFlipCard: function(featureItem, index) {
-        const frontContent = featureItem.innerHTML;
-        const backContent = this.createFeatureBackContent(index);
-        
-        // 保存原始点击函数
-        const originalClick = featureItem.getAttribute('onclick');
-        
-        featureItem.classList.add('flip-card');
-        featureItem.innerHTML = `
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    ${frontContent}
-                </div>
-                <div class="flip-card-back">
-                    ${backContent}
-                </div>
-            </div>
-        `;
-        
-        // 添加翻转事件
-        featureItem.addEventListener('click', function(e) {
-            // 如果点击的是返回按钮
-            if (e.target.closest('.flip-close-btn')) {
-                this.classList.toggle('flipped');
-                e.stopPropagation();
-                return;
-            }
-            
-            // 如果卡片已经翻转，点击返回按钮
-            if (this.classList.contains('flipped')) {
-                return;
-            }
-            
-            // 对于Telegram图标，执行原始功能
-            if (originalClick && originalClick.includes('joinTelegram') && 
-                (e.target.closest('.telegram-icon') || e.target.closest('.feature-title'))) {
-                Navigation.joinTelegram();
-                return;
-            }
-            
-            // 其他情况翻转卡片
-            this.classList.toggle('flipped');
-        });
-    },
-    
-    // 创建横屏卡片的背面内容
-    createBackContent: function(index) {
-        const backContents = [
-            {
-                title: "内存保护技术详情",
-                description: "采用动态内存加密技术，实时监控游戏进程，防止第三方检测工具读取关键数据。",
-                details: "支持：实时加密、反调试、进程隐藏"
-            },
-            {
-                title: "服务器兼容详情",
-                description: "针对不同地区的服务器进行专门优化，确保最佳的网络连接和反检测效果。",
-                details: "全球服：低延迟优化 | 亚洲服：本地化适配"
-            },
-            {
-                title: "和平精英支持计划",
-                description: "正在开发专项保护功能，预计下个版本推出，内测用户可优先体验。",
-                details: "预计发布时间：2024年Q1"
-            }
-        ];
-        
-        const content = backContents[index] || backContents[0];
-        
-        return `
-            <h3>${content.title}</h3>
-            <p>${content.description}</p>
-            <div class="flip-details">${content.details}</div>
-            <button class="flip-close-btn">
-                <i class="fas fa-undo"></i> 返回
-            </button>
-        `;
-    },
-    
-    // 创建特性卡片的背面内容
-    createFeatureBackContent: function(index) {
-        const backContents = [
-            {
-                title: "IDA全防技术",
-                description: "基于逆向工程分析，针对游戏检测机制开发的专属防护方案。",
-                details: "安全率：99.8%"
-            },
-            {
-                title: "UI优化详情",
-                description: "极低CPU占用，不影响游戏性能，界面简洁易用。",
-                details: "CPU占用：<5%"
-            },
-            {
-                title: "更新保障",
-                description: "24小时内适配游戏更新，确保不间断保护。",
-                details: "更新频率：实时监控"
-            },
-            {
-                title: "Telegram社区",
-                description: "加入频道获取最新资讯、技术支持和用户交流。",
-                details: "频道：@NGAYYDS"
-            }
-        ];
-        
-        const content = backContents[index] || backContents[0];
-        
-        return `
-            <h3>${content.title}</h3>
-            <p>${content.description}</p>
-            <div class="flip-details">${content.details}</div>
-            <button class="flip-close-btn">
-                <i class="fas fa-undo"></i> 返回
-            </button>
-        `;
+    // 关闭翻转卡片
+    closeFlipCard: function(index) {
+        const card = document.querySelector(`.flip-card[data-index="${index}"]`);
+        if (card) {
+            card.classList.remove('flipped');
+        }
     }
 };
 
@@ -778,30 +884,12 @@ const Download = {
     // 初始化下载按钮事件
     initDownloadButtons: function() {
         const mainBtn = document.getElementById('mainDownloadBtn');
-        const navBtn = document.getElementById('downloadBtn');
-        
         if (mainBtn) {
             mainBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.main();
             });
         }
-        
-        if (navBtn) {
-            navBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.main();
-            });
-        }
-        
-        // 服务器下载按钮
-        document.querySelectorAll('.vertical-card .card-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const serverType = btn.getAttribute('onclick').match(/downloadServer\('(.+?)'\)/)[1];
-                this.server(serverType);
-            });
-        });
     }
 };
 
@@ -834,8 +922,8 @@ const App = {
         // 添加视差效果
         this.addParallaxEffect();
         
-        // 防止下拉刷新
-        this.preventPullToRefresh();
+        // 防止下拉刷新和滚动冲突
+        this.preventScrollConflicts();
     },
     
     // 添加页面加载动画
@@ -878,10 +966,32 @@ const App = {
         }, 16));
     },
     
-    // 防止下拉刷新
-    preventPullToRefresh: function() {
+    // 防止滚动冲突
+    preventScrollConflicts: function() {
+        // 阻止在特定元素上触发的默认滚动行为
         document.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 1 || (e.scale && e.scale !== 1)) {
+            const target = e.target;
+            const stackedContainer = target.closest('.stacked-cards-container');
+            const stackedCard = target.closest('.stacked-card');
+            
+            if (stackedContainer || stackedCard) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // 防止下拉刷新
+        let touchStartY = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', function(e) {
+            const touchY = e.touches[0].clientY;
+            const touchDiff = touchY - touchStartY;
+            
+            // 如果正在下拉且页面在顶部，阻止默认行为
+            if (touchDiff > 0 && window.pageYOffset === 0) {
                 e.preventDefault();
             }
         }, { passive: false });
@@ -900,6 +1010,8 @@ window.goToSlide = Carousel.goTo.bind(Carousel);
 window.prevCard = StackedCards.prevCard.bind(StackedCards);
 window.nextCard = StackedCards.nextCard.bind(StackedCards);
 window.goToCard = StackedCards.goToCard.bind(StackedCards);
+window.toggleFlipCard = FlipCards.toggleFlipCard.bind(FlipCards);
+window.closeFlipCard = FlipCards.closeFlipCard.bind(FlipCards);
 
 // ==================== 页面加载完成 ====================
 document.addEventListener('DOMContentLoaded', () => {
